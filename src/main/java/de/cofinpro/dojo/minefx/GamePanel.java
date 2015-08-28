@@ -3,7 +3,10 @@ package de.cofinpro.dojo.minefx;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.control.Alert;
+
 
 import java.util.Arrays;
 import java.util.Random;
@@ -17,11 +20,14 @@ public class GamePanel extends GridPane {
     int height;
     int width;
     int numberOfMines;
+    private GameMediaLoader gameMediaLoader;
+
 
     public GamePanel(int height, int width, int numberOfMines) {
         this.height = height;
         this.width = width;
         this.numberOfMines = numberOfMines;
+        gameMediaLoader = new GameMediaLoader();
         this.start();
     }
 
@@ -74,6 +80,8 @@ public class GamePanel extends GridPane {
         @Override
         public void handle(ActionEvent event) {
             Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncover));
+            MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getLooseSound());
+            mediaPlayer.play();
         }
     };
 

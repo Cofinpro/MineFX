@@ -1,6 +1,7 @@
 package de.cofinpro.dojo.minefx;
 
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
@@ -11,8 +12,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        GamePanel gamePanel = new GamePanel(10, 10, 10);
 
-        BorderPane root = new BorderPane(createMenu(), new GamePanel(10, 10, 10), null, null, null);
+        VBox root = new VBox();
+        root.getChildren().add(createMenu());
+        root.getChildren().add(gamePanel);
 
         primaryStage.setTitle("Minesweeper");
         final Scene scene = new Scene(root);
@@ -25,13 +29,14 @@ public class Main extends Application {
     }
 
 
-    private Node createMenu() {
-        javafx.scene.control.Menu menu = new javafx.scene.control.Menu();
+    private MenuBar createMenu() {
+        Menu menu = new Menu();
         menu.setText("Poo");
-        menu.getItems().add(new MenuItem("Neustart"));
-        javafx.scene.control.MenuBar bar = new javafx.scene.control.MenuBar();
+        MenuItem menuItem = new MenuItem("Neustart");
+        menu.getItems().add(menuItem);
+        MenuBar bar = new MenuBar();
         bar.getMenus().add(menu);
 
-        return (Node) bar;
+        return bar;
     }
 }
