@@ -94,7 +94,7 @@ public class GameField extends ToggleButton {
     }
 
     public boolean isUncovered() {
-        return status != FieldStatus.COVERED;
+        return status != FieldStatus.COVERED && status != FieldStatus.MARKED;
     }
 
     public FieldStatus getStatus() {
