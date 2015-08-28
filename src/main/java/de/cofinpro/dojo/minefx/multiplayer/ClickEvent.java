@@ -1,11 +1,9 @@
 package de.cofinpro.dojo.minefx.multiplayer;
 
-import java.io.Serializable;
-
 /**
  * @author Gregor Tudan, Cofinpro AG
  */
-public class ClickEvent implements Serializable {
+public class ClickEvent extends  MultiplayerEvent {
     private int x;
     private int y;
 
