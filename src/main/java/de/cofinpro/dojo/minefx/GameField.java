@@ -1,6 +1,5 @@
 package de.cofinpro.dojo.minefx;
 
-import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
 
 
@@ -17,26 +16,13 @@ public class GameField extends ToggleButton {
     private int xCoordinate;
     private int yCoordinate;
 
+    private static final MineClickHandler clickHandler = new MineClickHandler();
+
     public GameField(int x, int y) {
         super(" ");
         this.xCoordinate = x;
         this.yCoordinate = y;
-        this.setOnMouseClicked(event -> {
-            switch (event.getButton()) {
-                case SECONDARY:
-                    mark();
-                    break;
-                case PRIMARY:
-                    if (mine) {
-                        new Alert(Alert.AlertType.ERROR, "BANG!").show();
-                    } else {
-                        if (status == FieldStatus.COVERED) {
-                            this.uncover();
-                        }
-                    }
-
-            }
-        });
+        this.setOnMouseClicked(clickHandler );
     }
 
     public boolean isMine() {
@@ -71,7 +57,7 @@ public class GameField extends ToggleButton {
     }
 
     private void toggleEnabled() {
-        this.setDisabled(! this.isDisabled());
+        this.setDisabled(!this.isDisabled());
     }
 
     private void updateText() {
@@ -96,5 +82,9 @@ public class GameField extends ToggleButton {
 
     public boolean isUncovered() {
         return status != FieldStatus.COVERED;
+    }
+
+    public FieldStatus getStatus() {
+        return status;
     }
 }
