@@ -179,8 +179,6 @@ public class GamePanel extends GridPane {
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                field[x][y] = new GameField(x,y);
-
                 switch(newBoard[x][y]) {
                     case HIDDEN_MINE:
                         field[x][y].setHiddenMine();
