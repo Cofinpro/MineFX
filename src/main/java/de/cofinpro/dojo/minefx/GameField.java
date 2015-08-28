@@ -50,6 +50,7 @@ public class GameField extends ToggleButton {
             this.setStyle("-fx-base: red;");
         } else {
             this.status = FieldStatus.HINT;
+            this.setStyle("-fx-base: lightgreen;");
         }
         this.updateText();
         this.setDisabled(true);
@@ -57,7 +58,7 @@ public class GameField extends ToggleButton {
 
     public void mark() {
         if (isMarked()) {
-            this.setStyle("-fx-base: white;");
+            this.setStyle("-fx-base: lightgray;");
             this.status = FieldStatus.COVERED;
         } else {
             this.setStyle("-fx-base: lightblue;");
