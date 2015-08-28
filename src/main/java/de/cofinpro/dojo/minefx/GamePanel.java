@@ -1,5 +1,6 @@
 package de.cofinpro.dojo.minefx;
 
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.GridPane;
@@ -21,12 +22,14 @@ public class GamePanel extends GridPane {
     int width;
     int numberOfMines;
     private GameMediaLoader gameMediaLoader;
+    private Timeline timerTimeline;
 
 
-    public GamePanel(int height, int width, int numberOfMines) {
+    public GamePanel(int height, int width, int numberOfMines, Timeline timerTimeline) {
         this.height = height;
         this.width = width;
         this.numberOfMines = numberOfMines;
+        this.timerTimeline = timerTimeline;
         gameMediaLoader = new GameMediaLoader();
         this.start();
     }
@@ -102,6 +105,7 @@ public class GamePanel extends GridPane {
 
     private EventHandler<ActionEvent> checkWinCondition = event -> {
         if (isWinConditionFulfilled()) {
+            timerTimeline.pause();
             MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getWinSound());
             mediaPlayer.play();
         }
