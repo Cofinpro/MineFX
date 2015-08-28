@@ -33,7 +33,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         GridPane statusBar = createStatusBar();
-        gamePanel = new GamePanel(10, 10, 10, timerTimeline);
+        gamePanel = new GamePanel(10, 10, 10, timerTimeline, primaryStage);
 
         VBox root = new VBox();
         root.getChildren().add(createMenu());
