@@ -1,5 +1,6 @@
 package de.cofinpro.dojo.minefx;
 
+import de.cofinpro.dojo.minefx.multiplayer.MulticastReceiver;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +10,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.control.Alert;
 
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -25,12 +27,14 @@ public class GamePanel extends GridPane {
     private Timeline timerTimeline;
 
 
-    public GamePanel(int height, int width, int numberOfMines, Timeline timerTimeline) {
+    public GamePanel(int height, int width, int numberOfMines, Timeline timerTimeline) throws IOException {
         this.height = height;
         this.width = width;
         this.numberOfMines = numberOfMines;
         this.timerTimeline = timerTimeline;
         gameMediaLoader = new GameMediaLoader();
+        MulticastReceiver multicastReceiver = new MulticastReceiver(this);
+        multicastReceiver.run();
         this.start();
     }
 
@@ -78,6 +82,10 @@ public class GamePanel extends GridPane {
                 this.add(gameField, i, j);
             }
         }
+    }
+
+    public void revealField(int x, int y) {
+        field[x][y].fireEvent(new ActionEvent());
     }
 
     public EventHandler<ActionEvent> uncoverHandler = new EventHandler<ActionEvent>() {
