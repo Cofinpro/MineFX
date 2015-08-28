@@ -3,6 +3,7 @@ package de.cofinpro.dojo.minefx;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.GridPane;
+import javafx.scene.control.Alert;
 
 import java.util.Arrays;
 import java.util.Random;
