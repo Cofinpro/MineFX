@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class MulticastReceiver implements Runnable {
 
     private MulticastSocket socket;
-    private static final int bufferLength = 256;
+    private static final int bufferLength = 256 * 1024;
     private byte[] buffer = new byte[bufferLength];
     private InetAddress multipass;
     private GamePanel gamePanel;

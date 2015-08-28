@@ -71,7 +71,6 @@ public class GamePanel extends GridPane {
 
     private void drawField() {
         field = new GameField[width][height];
-
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 final GameField gameField = new GameField(i, j);
@@ -175,6 +174,7 @@ public class GamePanel extends GridPane {
         this.width = newBoard[0].length;
         this.height = newBoard.length;
         this.numberOfMines = 0;
+        this.getChildren().clear();
         drawField();
 
         for (int x = 0; x < width; x++) {
@@ -183,7 +183,7 @@ public class GamePanel extends GridPane {
 
                 switch(newBoard[x][y]) {
                     case HIDDEN_MINE:
-                        field[x][y].isHiddenMine();
+                        field[x][y].setHiddenMine();
                         //fallthrough
                     case REVEALED_MINE:
                         numberOfMines++;
@@ -195,7 +195,5 @@ public class GamePanel extends GridPane {
                 }
             }
         }
-
-
     }
 }
