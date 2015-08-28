@@ -61,7 +61,6 @@ public class GamePanel extends GridPane {
         }
     }
 
-
     private void incrementMineCount(int x, int y) {
         walkNeighbours(this.field[x][y], GameField::incrementMineCount);
     }
@@ -96,7 +95,7 @@ public class GamePanel extends GridPane {
     };
 
     private void revealEmptyFields(GameField field) {
-        if (!field.isUncovered()) {
+        if (field.isCovered()) {
             field.uncover();
             if (field.getMineCount() == 0) {
                 walkNeighbours(field, this::revealEmptyFields);
@@ -120,8 +119,8 @@ public class GamePanel extends GridPane {
             for (int y = 0; y < height; y++) {
                 GameField gameField = field[x][y];
 
-                // either uncover all non-mine fields to win
-                if (gameField.isUncovered()) {
+                // uncover all non-mine fields to win
+                if (gameField.isRevealed()) {
                     totalFieldsToUncover--;
                 }
             }

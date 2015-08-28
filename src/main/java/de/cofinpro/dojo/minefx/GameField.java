@@ -42,7 +42,7 @@ public class GameField extends ToggleButton {
 
     public void uncover() {
         if (mine) {
-            this.status = FieldStatus.MINE;
+            this.status = FieldStatus.REVEALED_MINE;
         } else {
             this.status = FieldStatus.HINT;
         }
@@ -99,6 +99,10 @@ public class GameField extends ToggleButton {
     }
 
     public boolean isRevealed() {
-        return isMine() && isHint();
+        return isRevealedMine() || isHint();
+    }
+
+    public boolean isRevealedMine() {
+        return this.status == FieldStatus.REVEALED_MINE;
     }
 }

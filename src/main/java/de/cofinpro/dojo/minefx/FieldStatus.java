@@ -6,7 +6,7 @@ package de.cofinpro.dojo.minefx;
 public enum FieldStatus {
     COVERED("", "-fx-base: lightgray; -fx-focus-color: transparent;"),
     HINT("", "-fx-base: lightgreen; -fx-focus-color: transparent;"),
-    MINE("*", "-fx-base: red; -fx-focus-color: transparent;"),
+    REVEALED_MINE("*", "-fx-base: red; -fx-focus-color: transparent;"),
     MARKED("X", "-fx-base: lightblue; -fx-focus-color: transparent;");
 
     private String symbol;
