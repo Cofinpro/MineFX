@@ -1,6 +1,7 @@
 package de.cofinpro.dojo.minefx.multiplayer;
 
 import de.cofinpro.dojo.minefx.GamePanel;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 
 import java.io.Serializable;
@@ -20,7 +21,7 @@ public abstract class MultiplayerEvent implements Serializable {
                return null;
            }
        };
-        new Thread(task).start();
+        Platform.runLater(task);
     }
 
 }
