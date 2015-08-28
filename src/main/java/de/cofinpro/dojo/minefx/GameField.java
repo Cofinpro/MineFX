@@ -10,15 +10,27 @@ import javafx.scene.control.ToggleButton;
 public class GameField extends ToggleButton {
 
     private boolean mine = false;
+    private boolean marked = false;
+    private boolean covered = true;
+
     private int mineCount = 0;
 
     public GameField() {
         super(" ");
-        this.setOnAction(event -> {
-            if (mine) {
-                new Alert(Alert.AlertType.ERROR, "BANG!").show();
+        this.setOnMouseClicked(event -> {
+            if ("PRIMARY".equals(event.getButton().name())) {
+                if (marked) {
+                    new Alert(Alert.AlertType.WARNING, "Oops.").show();
+                } else {
+                    if (mine) {
+                        new Alert(Alert.AlertType.ERROR, "BANG!").show();
+                    } else {
+                        this.uncover();
+                    }
+                }
+
             } else {
-                this.setText(String.valueOf(mineCount));
+                this.mark();
             }
         });
     }
@@ -29,6 +41,7 @@ public class GameField extends ToggleButton {
 
     public void setMine(boolean mine) {
         this.mine = mine;
+        this.updateText();
     }
 
     public void incrementMineCount() {
@@ -36,10 +49,28 @@ public class GameField extends ToggleButton {
     }
 
     public void uncover() {
-        if (isMine()) {
-            this.setText("●");
+        this.covered = false;
+        this.updateText();
+    }
+
+    public void mark() {
+        this.marked = ! this.marked;
+        this.updateText();
+    }
+
+    private void updateText() {
+        if (marked) {
+            this.setText("X");
         } else {
-            this.setText(mineCount == 0 ? " " : String.valueOf(mineCount));
+            if (covered) {
+                this.setText(" ");
+            } else {
+                if (mine) {
+                    this.setText("●");
+                } else {
+                    this.setText(mineCount == 0 ? " " : String.valueOf(mineCount));
+                }
+            }
         }
     }
 }
