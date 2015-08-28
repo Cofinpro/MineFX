@@ -1,17 +1,25 @@
 package de.cofinpro.dojo.minefx;
 
 import javafx.application.Application;
-import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.stage.Screen;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        BorderPane root = new BorderPane(createMenu(), new GamePanel(10, 10, 10), null, null, null);
+
         primaryStage.setTitle("Minesweeper");
-        final Scene scene = new Scene(new GamePanel(10,10, 10));
+        final Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
@@ -21,4 +29,13 @@ public class Main extends Application {
     }
 
 
+    private Node createMenu() {
+        javafx.scene.control.Menu menu = new javafx.scene.control.Menu();
+        menu.setText("Poo");
+        menu.getItems().add(new MenuItem("Neustart"));
+        javafx.scene.control.MenuBar bar = new javafx.scene.control.MenuBar();
+        bar.getMenus().add(menu);
+
+        return (Node) bar;
+    }
 }

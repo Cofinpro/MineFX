@@ -8,7 +8,9 @@ buildscript {
     }
 }
 
-//apply plugin: 'org.javafxports.jfxmobile'
+apply plugin: 'application'
+
+apply plugin: 'org.javafxports.jfxmobile'
 
 mainClassName = 'de.cofinpro.dojo.minefx.Main'
 
