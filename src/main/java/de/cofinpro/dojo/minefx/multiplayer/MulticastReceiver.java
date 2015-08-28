@@ -16,14 +16,15 @@ public class MulticastReceiver implements Runnable {
     private MulticastSocket socket;
     private static final int bufferLength = 256;
     private byte[] buffer = new byte[bufferLength];
+    private InetAddress multipass;
 
     private Logger log = Logger.getLogger(getClass().getName());
 
     public MulticastReceiver() throws IOException {
-        InetAddress address = Inet4Address.getByName("230.0.0.1");
+        multipass = Inet4Address.getByName("230.0.0.1");
 
         socket = new MulticastSocket(4445);
-        socket.joinGroup(address);
+        socket.joinGroup(multipass);
     }
 
     @Override
@@ -34,6 +35,7 @@ public class MulticastReceiver implements Runnable {
             socket.receive(packet);
             String message = new String(packet.getData());
             log.info(message);
+            socket.leaveGroup(multipass);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

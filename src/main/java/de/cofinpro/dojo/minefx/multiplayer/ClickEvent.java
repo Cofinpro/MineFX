@@ -19,4 +19,12 @@ public class ClickEvent extends  MultiplayerEvent {
         this.x = x;
         this.y = y;
     }
+
+    @Override
+    public String toString() {
+        return "ClickEvent{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }
