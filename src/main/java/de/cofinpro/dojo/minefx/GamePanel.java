@@ -15,15 +15,21 @@ public class GamePanel extends GridPane {
     private GameField[][] field;
     int height;
     int width;
+    int numberOfMines;
 
     public GamePanel(int height, int width, int numberOfMines) {
         this.height = height;
         this.width = width;
-        drawField();
-        placeMines(numberOfMines);
+        this.numberOfMines = numberOfMines;
+        this.start();
     }
 
-    private void placeMines(int numberOfMines) {
+    public void start() {
+        drawField();
+        placeMines();
+    }
+
+    private void placeMines() {
         Random random = new Random();
         int minesPlaced = 0;
         while (minesPlaced < numberOfMines) {
