@@ -43,7 +43,6 @@ public class GameField extends ToggleButton {
     }
 
     public void uncover() {
-        this.setSelected(true);
         if (mine) {
             this.status = FieldStatus.MINE;
         } else {

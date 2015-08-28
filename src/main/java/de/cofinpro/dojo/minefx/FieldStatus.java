@@ -4,10 +4,10 @@ package de.cofinpro.dojo.minefx;
  * @author Gregor Tudan, Cofinpro AG
  */
 public enum FieldStatus {
-    COVERED("", "-fx-base: lightgray;"),
-    HINT("", "-fx-base: lightgreen;"),
-    MINE("*", "-fx-base: red;"),
-    MARKED("X", "-fx-base: lightblue;");
+    COVERED("", "-fx-base: lightgray; -fx-focus-color: transparent;"),
+    HINT("", "-fx-base: lightgreen; -fx-focus-color: transparent;"),
+    MINE("*", "-fx-base: red; -fx-focus-color: transparent;"),
+    MARKED("X", "-fx-base: lightblue; -fx-focus-color: transparent;");
 
     private String symbol;
 
