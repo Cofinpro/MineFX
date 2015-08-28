@@ -1,7 +1,8 @@
 package de.cofinpro.dojo.minefx;
 
 import de.cofinpro.dojo.minefx.multiplayer.MulticastReceiver;
-import javafx.animation.KeyFrame;
+import de.cofinpro.dojo.minefx.multiplayer.MulticastSender;
+import de.cofinpro.dojo.minefx.multiplayer.NewBoardEvent;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,8 +11,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Random;
 
