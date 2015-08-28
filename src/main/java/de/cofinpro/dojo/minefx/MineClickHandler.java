@@ -27,7 +27,6 @@ public class MineClickHandler implements EventHandler<MouseEvent> {
                         gameField.uncover();
                     }
                 }
-
         }
     }
 }

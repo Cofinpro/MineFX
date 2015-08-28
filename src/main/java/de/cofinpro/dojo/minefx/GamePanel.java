@@ -2,6 +2,7 @@ package de.cofinpro.dojo.minefx;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
 
 import java.util.Arrays;
@@ -15,6 +16,7 @@ public class GamePanel extends GridPane {
     private GameField[][] field;
     int height;
     int width;
+    int numberOfMines;
 
     public GamePanel(int height, int width, int numberOfMines) {
         this.height = height;
@@ -24,6 +26,7 @@ public class GamePanel extends GridPane {
     }
 
     private void placeMines(int numberOfMines) {
+        this.numberOfMines = Math.min(numberOfMines, width*height);
         Random random = new Random();
         int minesPlaced = 0;
         while (minesPlaced < numberOfMines) {
@@ -55,6 +58,7 @@ public class GamePanel extends GridPane {
             for (int j = 0; j < height; j++) {
                 final GameField gameField = new GameField(i, j);
                 gameField.addEventHandler(ActionEvent.ACTION, revealEmptyFields);
+                gameField.addEventHandler(ActionEvent.ACTION, checkWinCondition);
                 field[i][j] = gameField;
                 this.add(gameField, i, j);
             }
@@ -80,6 +84,30 @@ public class GamePanel extends GridPane {
                 walkNeighbours(field, this::revealEmptyFields);
             }
         }
+    }
+
+    private EventHandler<ActionEvent> checkWinCondition = event -> {
+        if (isWinConditionFulfilled()) {
+            new Alert(Alert.AlertType.INFORMATION, "GEWONNEN!").show();
+        }
+    };
+
+    private boolean isWinConditionFulfilled() {
+        int totalFields = width * height;
+        int totalFieldsToUncover = totalFields - numberOfMines;
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                GameField gameField = field[x][y];
+
+                // either uncover all non-mine fields to win
+                if (gameField.isUncovered()) {
+                    totalFieldsToUncover--;
+                }
+            }
+        }
+
+        return totalFieldsToUncover == 0;
     }
 
     private void walkNeighbours(GameField field, java.util.function.Consumer<GameField> op) {
