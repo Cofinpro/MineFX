@@ -1,6 +1,8 @@
 package de.cofinpro.dojo.minefx;
 
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 
 /**
@@ -23,8 +25,8 @@ public class GameField extends ToggleButton {
         this.xCoordinate = x;
         this.yCoordinate = y;
         this.setOnMouseClicked(clickHandler);
-        this.setPrefSize(30, 30);
-        this.setMaxSize(30, 30);
+        this.setMinSize(32, 32);
+        this.setMaxSize(32, 32);
     }
 
     public boolean isMine() {
@@ -80,7 +82,11 @@ public class GameField extends ToggleButton {
 
     private void updateText() {
         if (status != FieldStatus.HINT) {
-            this.setText(status.getSymbol());
+            if (status.getImageUrl() == null) {
+                this.setText(status.getSymbol());
+            } else {
+                this.setGraphic(new ImageView(new Image(ClassLoader.getSystemResourceAsStream(status.getImageUrl()))));
+            }
         } else {
             this.setText(mineCountHint == 0 ? null : String.valueOf(mineCountHint));
         }

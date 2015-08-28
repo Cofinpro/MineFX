@@ -4,18 +4,19 @@ package de.cofinpro.dojo.minefx;
  * @author Gregor Tudan, Cofinpro AG
  */
 public enum FieldStatus {
-    COVERED("", "-fx-base: lightgray; -fx-focus-color: transparent;"),
-    HINT("", "-fx-base: lightgreen; -fx-focus-color: transparent;"),
-    REVEALED_MINE("*", "-fx-base: red; -fx-focus-color: transparent;"),
-    MARKED("X", "-fx-base: lightblue; -fx-focus-color: transparent;");
+    COVERED(null, "", "-fx-base: lightgray; -fx-focus-color: transparent;"),
+    HINT(null, "", "-fx-base: lightgreen; -fx-focus-color: transparent;"),
+    REVEALED_MINE("poo.png", "*", "-fx-base: red; -fx-focus-color: transparent;"),
+    MARKED(null, "X", "-fx-base: lightblue; -fx-focus-color: transparent;");
 
     private String symbol;
-
+    private String imageUrl;
     private String style;
 
-    FieldStatus(String x, String style) {
+    FieldStatus(String imageUrl, String x, String style) {
         this.symbol = x;
         this.style = style;
+        this.imageUrl = imageUrl;
     }
 
     public String getSymbol() {
@@ -23,4 +24,6 @@ public enum FieldStatus {
     }
 
     public String getStyle() { return style; }
+
+    public String getImageUrl() { return imageUrl; }
 }

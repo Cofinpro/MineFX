@@ -84,6 +84,7 @@ public class GamePanel extends GridPane {
         @Override
         public void handle(ActionEvent event) {
             Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncover));
+            timerTimeline.pause();
             MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getLooseSound());
             mediaPlayer.play();
         }

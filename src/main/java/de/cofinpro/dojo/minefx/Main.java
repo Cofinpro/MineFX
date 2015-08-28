@@ -40,7 +40,7 @@ public class Main extends Application {
         root.getChildren().add(gamePanel);
         root.getChildren().add(statusBar);
 
-        primaryStage.setTitle("Minesweeper");
+        primaryStage.setTitle("Shitsweeper");
         final Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);
@@ -53,8 +53,8 @@ public class Main extends Application {
 
     private MenuBar createMenu() {
         Menu menu = new Menu();
-        menu.setText("Poo");
-        MenuItem menuItem = new MenuItem("Neustart");
+        menu.setText("Shit");
+        MenuItem menuItem = new MenuItem("Shit again");
         menuItem.setOnAction(event -> { this.restart(); });
         menu.getItems().add(menuItem);
         MenuBar bar = new MenuBar();
