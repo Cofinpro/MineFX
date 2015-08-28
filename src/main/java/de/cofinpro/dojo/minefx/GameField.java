@@ -2,6 +2,7 @@ package de.cofinpro.dojo.minefx;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.MouseButton;
 
 
 /**
@@ -14,11 +15,15 @@ public class GameField extends ToggleButton {
     private boolean covered = true;
 
     private int mineCount = 0;
+    private int xCoordinate;
+    private int yCoordinate;
 
-    public GameField() {
+    public GameField(int x, int y) {
         super(" ");
+        this.xCoordinate = x;
+        this.yCoordinate = y;
         this.setOnMouseClicked(event -> {
-            if ("PRIMARY".equals(event.getButton().name())) {
+            if (MouseButton.PRIMARY == event.getButton()) {
                 if (marked) {
                     new Alert(Alert.AlertType.WARNING, "Oops.").show();
                 } else {
@@ -86,5 +91,17 @@ public class GameField extends ToggleButton {
                 }
             }
         }
+    }
+
+    public int getMineCount() {
+        return mineCount;
+    }
+
+    public int getxCoordinate() {
+        return xCoordinate;
+    }
+
+    public int getyCoordinate() {
+        return yCoordinate;
     }
 }
