@@ -1,8 +1,8 @@
 package de.cofinpro.dojo.minefx;
 
-import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.input.MouseButton;
+
+import java.awt.*;
 
 
 /**
@@ -10,42 +10,23 @@ import javafx.scene.input.MouseButton;
  */
 public class GameField extends ToggleButton {
 
-    private boolean mine = false;
-    private boolean marked = false;
-    private boolean covered = true;
+    private FieldStatus status = FieldStatus.COVERED;
 
-    private int mineCount = 0;
+    private int mineCountHint = 0;
+
+    private boolean mine = false;
     private int xCoordinate;
     private int yCoordinate;
+
+    private static final MineClickHandler clickHandler = new MineClickHandler();
 
     public GameField(int x, int y) {
         super(" ");
         this.xCoordinate = x;
         this.yCoordinate = y;
-        this.setOnMouseClicked(event -> {
-            if (MouseButton.PRIMARY == event.getButton()) {
-                if (marked) {
-                    new Alert(Alert.AlertType.WARNING, "Oops.").show();
-                } else {
-                    if (mine) {
-                        new Alert(Alert.AlertType.ERROR, "BANG!").show();
-                    } else {
-                        if (covered) {
-                            this.uncover();
-                        } else {
-                            new Alert(Alert.AlertType.WARNING, "Oops.").show();
-                        }
-                    }
-                }
-
-            } else {
-                if (covered) {
-                    this.mark();
-                } else {
-                    new Alert(Alert.AlertType.WARNING, "Oops.").show();
-                }
-            }
-        });
+        this.setOnMouseClicked(clickHandler);
+        this.setPrefSize(30, 30);
+        this.setMaxSize(30, 30);
     }
 
     public boolean isMine() {
@@ -58,43 +39,46 @@ public class GameField extends ToggleButton {
     }
 
     public void incrementMineCount() {
-        mineCount++;
+        mineCountHint++;
     }
 
     public void uncover() {
-        this.covered = false;
+        this.setSelected(true);
+        this.setDisable(true);
+        if (mine) {
+            this.status = FieldStatus.MINE;
+            this.setStyle("-fx-base: red;");
+        } else {
+            this.status = FieldStatus.HINT;
+        }
         this.updateText();
         this.setDisabled(true);
     }
 
     public void mark() {
-        this.marked = ! this.marked;
+        if (FieldStatus.MARKED == this.status) {
+            this.status = FieldStatus.COVERED;
+        } else {
+            this.status = FieldStatus.MARKED;
+        }
         this.updateText();
         this.toggleEnabled();
     }
 
     private void toggleEnabled() {
-        this.setDisabled(! this.isDisabled());
+        this.setDisabled(!this.isDisabled());
     }
 
     private void updateText() {
-        if (marked) {
-            this.setText("X");
+        if (status != FieldStatus.HINT) {
+            this.setText(status.getSymbol());
         } else {
-            if (covered) {
-                this.setText(" ");
-            } else {
-                if (mine) {
-                    this.setText("●");
-                } else {
-                    this.setText(mineCount == 0 ? " " : String.valueOf(mineCount));
-                }
-            }
+            this.setText(mineCountHint == 0 ? null : String.valueOf(mineCountHint));
         }
     }
 
     public int getMineCount() {
-        return mineCount;
+        return mineCountHint;
     }
 
     public int getxCoordinate() {
@@ -103,5 +87,13 @@ public class GameField extends ToggleButton {
 
     public int getyCoordinate() {
         return yCoordinate;
+    }
+
+    public boolean isUncovered() {
+        return status != FieldStatus.COVERED;
+    }
+
+    public FieldStatus getStatus() {
+        return status;
     }
 }
