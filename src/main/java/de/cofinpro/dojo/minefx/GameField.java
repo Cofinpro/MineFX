@@ -22,7 +22,9 @@ public class GameField extends ToggleButton {
         super(" ");
         this.xCoordinate = x;
         this.yCoordinate = y;
-        this.setOnMouseClicked(clickHandler );
+        this.setOnMouseClicked(clickHandler);
+        this.setPrefSize(30, 30);
+        this.setMaxSize(30, 30);
     }
 
     public boolean isMine() {
