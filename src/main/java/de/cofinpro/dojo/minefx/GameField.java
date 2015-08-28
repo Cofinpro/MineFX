@@ -53,7 +53,11 @@ public class GameField extends ToggleButton {
     }
 
     public void mark() {
-        this.status = FieldStatus.MARKED;
+        if (FieldStatus.MARKED == this.status) {
+            this.status = FieldStatus.COVERED;
+        } else {
+            this.status = FieldStatus.MARKED;
+        }
         this.updateText();
         this.toggleEnabled();
     }

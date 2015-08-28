@@ -17,6 +17,9 @@ public class MineClickHandler implements EventHandler<MouseEvent> {
                 gameField.mark();
                 break;
             case PRIMARY:
+                if (FieldStatus.MARKED == gameField.getStatus()) {
+                    return;
+                }
                 if (gameField.isMine()) {
                     new Alert(Alert.AlertType.ERROR, "BANG!").show();
                 } else {
