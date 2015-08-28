@@ -6,9 +6,7 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.GridPane;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -64,7 +62,6 @@ public class GamePanel extends GridPane {
                 continue;
             }
             gameField.setMine(true);
-            gameField.addEventHandler(ActionEvent.ACTION, uncoverHandler);
             incrementMineCount(x, y);
             minesPlaced++;
         }
@@ -91,13 +88,11 @@ public class GamePanel extends GridPane {
 
     public void revealField(int x, int y) {
         GameField gameField = field[x][y];
-        revealEmptyFields(gameField);
+        revealField(gameField);
         handleWinning();
     }
 
-    public EventHandler<ActionEvent> uncoverHandler = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
+    public void handleMine() {
             Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncover));
             timerTimeline.pause();
 
@@ -126,19 +121,21 @@ public class GamePanel extends GridPane {
 
             MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getLooseSound());
             mediaPlayer.play();
-        }
-    };
+    }
 
     private EventHandler<ActionEvent> revealEmptyFields = event -> {
         GameField gameField = (GameField) event.getSource();
-        revealEmptyFields(gameField);
+        revealField(gameField);
     };
 
-    private void revealEmptyFields(GameField field) {
+    private void revealField(GameField field) {
         if (field.isCovered()) {
             field.uncover();
             if (field.getMineCount() == 0) {
-                walkNeighbours(field, this::revealEmptyFields);
+                walkNeighbours(field, this::revealField);
+            }
+            if (field.isMine()) {
+                handleMine();
             }
         }
     }
