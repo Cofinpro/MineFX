@@ -21,10 +21,10 @@ public class MineClickHandler implements EventHandler<MouseEvent> {
                 gameField.mark();
                 break;
             case PRIMARY:
-                if (gameField.isMarked() || gameField.isMine()) {
+                if (gameField.isMarked() || gameField.isHiddenMine()) {
                     return;
                 }
-                if (gameField.isCovered()) {
+                if (gameField.isNotYetRevealed()) {
                     gameField.uncover();
                 }
         }

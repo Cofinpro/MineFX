@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 
 public class Main extends Application {
@@ -48,9 +49,19 @@ public class Main extends Application {
     private MenuBar createMenu() {
         Menu menu = new Menu();
         menu.setText("Shit");
+
         MenuItem menuItem = new MenuItem("Shit again");
-        menuItem.setOnAction(event -> { this.restart(); });
+        menuItem.setOnAction(event -> {
+            this.restart();
+        });
         menu.getItems().add(menuItem);
+
+        menuItem = new MenuItem("Transfer shit");
+        menuItem.setOnAction(event -> {
+            broadcastGameboard();
+        });
+        menu.getItems().add(menuItem);
+
         MenuBar bar = new MenuBar();
         bar.getMenus().add(menu);
 
@@ -80,7 +91,15 @@ public class Main extends Application {
     public void restart() {
         startMillis = System.currentTimeMillis();
         timerTimeline.play();
-        this.gamePanel.start();
+        gamePanel.start();
+    }
+
+    public void broadcastGameboard() {
+        try {
+            gamePanel.broadcastGameboard();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
