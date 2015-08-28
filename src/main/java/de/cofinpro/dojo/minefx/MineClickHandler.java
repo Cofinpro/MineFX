@@ -14,18 +14,18 @@ public class MineClickHandler implements EventHandler<MouseEvent> {
         GameField gameField = (GameField) event.getSource();
         switch (event.getButton()) {
             case SECONDARY:
+                if (gameField.isRevealed()) {
+                    // bereits aufgedeckte Felder werden nicht markiert
+                    return;
+                }
                 gameField.mark();
                 break;
             case PRIMARY:
-                if (FieldStatus.MARKED == gameField.getStatus()) {
+                if (gameField.isMarked() || gameField.isMine()) {
                     return;
                 }
-                if (gameField.isMine()) {
-                    // Pech gehabt...
-                } else {
-                    if (gameField.getStatus() == FieldStatus.COVERED) {
-                        gameField.uncover();
-                    }
+                if (gameField.isCovered()) {
+                    gameField.uncover();
                 }
         }
     }

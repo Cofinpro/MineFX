@@ -2,8 +2,6 @@ package de.cofinpro.dojo.minefx;
 
 import javafx.scene.control.ToggleButton;
 
-import java.awt.*;
-
 
 /**
  * @author Gregor Tudan, Cofinpro AG
@@ -68,6 +66,14 @@ public class GameField extends ToggleButton {
         return (FieldStatus.MARKED == this.status);
     }
 
+    public boolean isCovered() {
+        return (FieldStatus.COVERED == this.status);
+    }
+
+    public boolean isHint() {
+        return (FieldStatus.HINT == this.status);
+    }
+
     private void toggleEnabled() {
         this.setDisabled(!this.isDisabled());
     }
@@ -92,11 +98,7 @@ public class GameField extends ToggleButton {
         return yCoordinate;
     }
 
-    public boolean isUncovered() {
-        return status != FieldStatus.COVERED && status != FieldStatus.MARKED;
-    }
-
-    public FieldStatus getStatus() {
-        return status;
+    public boolean isRevealed() {
+        return isMine() && isHint();
     }
 }
