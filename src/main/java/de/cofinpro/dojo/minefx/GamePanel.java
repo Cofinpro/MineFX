@@ -34,7 +34,7 @@ public class GamePanel extends GridPane {
         this.timerTimeline = timerTimeline;
         gameMediaLoader = new GameMediaLoader();
         MulticastReceiver multicastReceiver = new MulticastReceiver(this);
-        multicastReceiver.run();
+        new Thread(multicastReceiver).start();
         this.start();
     }
 
@@ -85,7 +85,9 @@ public class GamePanel extends GridPane {
     }
 
     public void revealField(int x, int y) {
-        field[x][y].fireEvent(new ActionEvent());
+        GameField gameField = field[x][y];
+        revealEmptyFields(gameField);
+        handleWinning();
     }
 
     public EventHandler<ActionEvent> uncoverHandler = new EventHandler<ActionEvent>() {
@@ -112,12 +114,16 @@ public class GamePanel extends GridPane {
     }
 
     private EventHandler<ActionEvent> checkWinCondition = event -> {
+            handleWinning();
+    };
+
+    private void handleWinning() {
         if (isWinConditionFulfilled()) {
             timerTimeline.pause();
             MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getWinSound());
             mediaPlayer.play();
         }
-    };
+    }
 
     private boolean isWinConditionFulfilled() {
         int totalFields = width * height;
