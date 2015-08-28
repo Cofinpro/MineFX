@@ -1,9 +1,7 @@
-package sample;
+package de.cofinpro.dojo.minefx;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.layout.GridPane;
 
 import java.util.Arrays;
@@ -39,7 +37,7 @@ public class GamePanel extends GridPane {
                 continue;
             }
             gameField.setMine(true);
-            gameField.addEventHandler(ActionEvent.ACTION,uncoverHandler);
+            gameField.addEventHandler(ActionEvent.ACTION, uncoverHandler);
             incrementMineCount(x, y);
             minesPlaced++;
         }
@@ -47,8 +45,8 @@ public class GamePanel extends GridPane {
 
 
     private void incrementMineCount(int x, int y) {
-        for (int i = Math.max(x - 1, 0); i <= Math.min(x + 1, width-1); i++) {
-            for (int j = Math.max(y - 1, 0); j <= Math.min(y + 1, height-1); j++) {
+        for (int i = Math.max(x - 1, 0); i <= Math.min(x + 1, width - 1); i++) {
+            for (int j = Math.max(y - 1, 0); j <= Math.min(y + 1, height - 1); j++) {
                 GameField gameField = field[i][j];
                 gameField.incrementMineCount();
             }
@@ -67,12 +65,10 @@ public class GamePanel extends GridPane {
         }
     }
 
-    public EventHandler uncoverHandler = new EventHandler<ActionEvent>() {
+    public EventHandler<ActionEvent> uncoverHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            Arrays.stream(field).forEach(row -> {
-                Arrays.stream(row).forEach(GameField::uncover);
-            });
+            Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncover));
         }
     };
 }

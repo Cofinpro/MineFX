@@ -1,4 +1,4 @@
-package sample;
+package de.cofinpro.dojo.minefx;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
