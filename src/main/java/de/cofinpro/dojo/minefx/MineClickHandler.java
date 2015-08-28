@@ -21,7 +21,7 @@ public class MineClickHandler implements EventHandler<MouseEvent> {
                     return;
                 }
                 if (gameField.isMine()) {
-                    new Alert(Alert.AlertType.ERROR, "BANG!").show();
+                    // Pech gehabt...
                 } else {
                     if (gameField.getStatus() == FieldStatus.COVERED) {
                         gameField.uncover();

@@ -32,6 +32,7 @@ public class GamePanel extends GridPane {
     }
 
     public void start() {
+        this.getChildren().clear();
         drawField();
         placeMines();
     }
@@ -101,7 +102,8 @@ public class GamePanel extends GridPane {
 
     private EventHandler<ActionEvent> checkWinCondition = event -> {
         if (isWinConditionFulfilled()) {
-            new Alert(Alert.AlertType.INFORMATION, "GEWONNEN!").show();
+            MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getWinSound());
+            mediaPlayer.play();
         }
     };
 
