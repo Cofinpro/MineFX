@@ -21,6 +21,7 @@ public class MutlicastSender {
 
         packet.setData("Foo".getBytes());
         socket.send(packet);
+        socket.close();
     }
 
     public static void main(String[] args) throws IOException {

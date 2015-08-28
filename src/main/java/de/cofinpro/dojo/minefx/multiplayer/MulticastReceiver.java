@@ -36,6 +36,8 @@ public class MulticastReceiver implements Runnable {
             log.info(message);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            socket.close();
         }
     }
 
