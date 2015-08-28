@@ -1,13 +1,14 @@
 package de.cofinpro.dojo.minefx;
 
 import de.cofinpro.dojo.minefx.multiplayer.MulticastReceiver;
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.GridPane;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.control.Alert;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 
 import java.io.IOException;
@@ -25,16 +26,18 @@ public class GamePanel extends GridPane {
     int numberOfMines;
     private GameMediaLoader gameMediaLoader;
     private Timeline timerTimeline;
+    private Stage primaryStage;
+    private boolean shakedAway;
 
-
-    public GamePanel(int height, int width, int numberOfMines, Timeline timerTimeline) throws IOException {
+    public GamePanel(int height, int width, int numberOfMines, Timeline timerTimeline, Stage primaryStage) throws IOException {
         this.height = height;
         this.width = width;
         this.numberOfMines = numberOfMines;
         this.timerTimeline = timerTimeline;
+        this.primaryStage = primaryStage;
         gameMediaLoader = new GameMediaLoader();
         MulticastReceiver multicastReceiver = new MulticastReceiver(this);
-        multicastReceiver.run();
+        new Thread(multicastReceiver).start();
         this.start();
     }
 
@@ -59,7 +62,6 @@ public class GamePanel extends GridPane {
                 continue;
             }
             gameField.setMine(true);
-            gameField.addEventHandler(ActionEvent.ACTION, uncoverHandler);
             incrementMineCount(x, y);
             minesPlaced++;
         }
@@ -85,39 +87,70 @@ public class GamePanel extends GridPane {
     }
 
     public void revealField(int x, int y) {
-        field[x][y].fireEvent(new ActionEvent());
+        GameField gameField = field[x][y];
+        revealField(gameField);
+        handleWinning();
     }
 
-    public EventHandler<ActionEvent> uncoverHandler = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
+    public void handleMine() {
             Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncover));
+            timerTimeline.pause();
+
+            Timeline shakerTimeline = new Timeline(new KeyFrame(Duration.seconds(0.01), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+
+                    double xDelta = Math.random() * 10;
+                    double yDelta = Math.random() * 10;
+
+                    if (shakedAway) {
+                        primaryStage.setX(primaryStage.getX() + xDelta);
+                        primaryStage.setY(primaryStage.getY() + yDelta);
+                        shakedAway = false;
+                    } else {
+                        primaryStage.setX(primaryStage.getX() - xDelta);
+                        primaryStage.setY(primaryStage.getY() - yDelta);
+                        shakedAway = true;
+                    }
+                }
+            }));
+
+            shakerTimeline.setCycleCount(50);
+            shakerTimeline.setAutoReverse(false);
+            shakerTimeline.play();
+
             MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getLooseSound());
             mediaPlayer.play();
-        }
-    };
+    }
 
     private EventHandler<ActionEvent> revealEmptyFields = event -> {
         GameField gameField = (GameField) event.getSource();
-        revealEmptyFields(gameField);
+        revealField(gameField);
     };
 
-    private void revealEmptyFields(GameField field) {
+    private void revealField(GameField field) {
         if (field.isCovered()) {
             field.uncover();
             if (field.getMineCount() == 0) {
-                walkNeighbours(field, this::revealEmptyFields);
+                walkNeighbours(field, this::revealField);
+            }
+            if (field.isMine()) {
+                handleMine();
             }
         }
     }
 
     private EventHandler<ActionEvent> checkWinCondition = event -> {
+            handleWinning();
+    };
+
+    private void handleWinning() {
         if (isWinConditionFulfilled()) {
             timerTimeline.pause();
             MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getWinSound());
             mediaPlayer.play();
         }
-    };
+    }
 
     private boolean isWinConditionFulfilled() {
         int totalFields = width * height;

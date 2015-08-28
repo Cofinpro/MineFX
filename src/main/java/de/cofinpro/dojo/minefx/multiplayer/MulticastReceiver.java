@@ -41,6 +41,7 @@ public class MulticastReceiver implements Runnable {
             while (true) {
                 log.info("Listening...");
                 socket.receive(packet);
+                log.info("Received...");
                 ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
                 Object receivedObject = objectInputStream.readObject();
                 if (receivedObject instanceof MultiplayerEvent) {
