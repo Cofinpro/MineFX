@@ -2,6 +2,8 @@ package de.cofinpro.dojo.minefx;
 
 import javafx.scene.control.ToggleButton;
 
+import java.awt.*;
+
 
 /**
  * @author Gregor Tudan, Cofinpro AG
@@ -45,6 +47,7 @@ public class GameField extends ToggleButton {
         this.setDisable(true);
         if (mine) {
             this.status = FieldStatus.MINE;
+            this.setStyle("-fx-base: red;");
         } else {
             this.status = FieldStatus.HINT;
         }
