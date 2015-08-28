@@ -43,10 +43,9 @@ public class MulticastReceiver implements Runnable {
                 socket.receive(packet);
                 ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
                 Object receivedObject = objectInputStream.readObject();
-                if (receivedObject instanceof ClickEvent) {
+                if (receivedObject instanceof MultiplayerEvent) {
                     log.info("Received " + receivedObject.toString());
-                    ClickEvent clickEvent = (ClickEvent) receivedObject;
-                    gamePanel.revealField(clickEvent.getX(), clickEvent.getY());
+                    ((MultiplayerEvent) receivedObject).execute(gamePanel);
                 } else {
                     throw new RuntimeException("Unhandled Event received. Fail hard!");
                 }
