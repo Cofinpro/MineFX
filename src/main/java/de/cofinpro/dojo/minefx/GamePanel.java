@@ -1,15 +1,12 @@
 package de.cofinpro.dojo.minefx;
 
 import de.cofinpro.dojo.minefx.multiplayer.MulticastReceiver;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.GridPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -27,7 +24,6 @@ public class GamePanel extends GridPane {
     private GameMediaLoader gameMediaLoader;
     private Timeline timerTimeline;
     private Stage primaryStage;
-    private boolean shakedAway;
 
     public GamePanel(int height, int width, int numberOfMines, Timeline timerTimeline, Stage primaryStage) throws IOException {
         this.height = height;
@@ -96,28 +92,7 @@ public class GamePanel extends GridPane {
             Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncover));
             timerTimeline.pause();
 
-            Timeline shakerTimeline = new Timeline(new KeyFrame(Duration.seconds(0.01), new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-
-                    double xDelta = Math.random() * 10;
-                    double yDelta = Math.random() * 10;
-
-                    if (shakedAway) {
-                        primaryStage.setX(primaryStage.getX() + xDelta);
-                        primaryStage.setY(primaryStage.getY() + yDelta);
-                        shakedAway = false;
-                    } else {
-                        primaryStage.setX(primaryStage.getX() - xDelta);
-                        primaryStage.setY(primaryStage.getY() - yDelta);
-                        shakedAway = true;
-                    }
-                }
-            }));
-
-            shakerTimeline.setCycleCount(50);
-            shakerTimeline.setAutoReverse(false);
-            shakerTimeline.play();
+            new ShitHitsTheFanAnimation(primaryStage).run();
 
             MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getLooseSound());
             mediaPlayer.play();
