@@ -16,7 +16,6 @@ public class GameField extends ToggleButton {
 
     private int mineCountHint = 0;
 
-    private boolean mine = false;
     private int xCoordinate;
     private int yCoordinate;
 
@@ -33,13 +32,13 @@ public class GameField extends ToggleButton {
         this.setMaxSize(32, 32);
     }
 
-    public boolean isMine() {
-        return mine;
+    public void setHiddenMine() {
+        this.status = FieldStatus.HIDDEN_MINE;
+        this.updateText();
     }
 
-    public void setMine(boolean mine) {
-        this.mine = mine;
-        this.updateText();
+    public boolean isHiddenMine() {
+        return this.status == FieldStatus.HIDDEN_MINE;
     }
 
     public void incrementMineCount() {
@@ -47,7 +46,7 @@ public class GameField extends ToggleButton {
     }
 
     public void uncover() {
-        if (mine) {
+        if (isHiddenMine()) {
             this.status = FieldStatus.REVEALED_MINE;
         } else {
             this.status = FieldStatus.HINT;
@@ -72,8 +71,8 @@ public class GameField extends ToggleButton {
         return (FieldStatus.MARKED == this.status);
     }
 
-    public boolean isCovered() {
-        return (FieldStatus.COVERED == this.status);
+    public boolean isNotYetRevealed() {
+        return (FieldStatus.COVERED == this.status) || FieldStatus.HIDDEN_MINE == this.status;
     }
 
     public boolean isHint() {
@@ -116,5 +115,9 @@ public class GameField extends ToggleButton {
 
     public boolean isRevealedMine() {
         return this.status == FieldStatus.REVEALED_MINE;
+    }
+
+    public FieldStatus getStatus() {
+        return status;
     }
 }

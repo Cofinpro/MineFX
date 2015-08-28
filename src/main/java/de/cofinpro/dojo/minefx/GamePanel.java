@@ -1,6 +1,7 @@
 package de.cofinpro.dojo.minefx;
 
 import de.cofinpro.dojo.minefx.multiplayer.MulticastReceiver;
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +10,8 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -53,11 +56,11 @@ public class GamePanel extends GridPane {
 
             final GameField gameField = field[x][y];
 
-            if (gameField.isMine()) {
+            if (gameField.isHiddenMine()) {
                 // skip and try another field
                 continue;
             }
-            gameField.setMine(true);
+            gameField.setHiddenMine();
             incrementMineCount(x, y);
             minesPlaced++;
         }
@@ -104,12 +107,12 @@ public class GamePanel extends GridPane {
     };
 
     private void revealField(GameField field) {
-        if (field.isCovered()) {
+        if (field.isNotYetRevealed()) {
             field.uncover();
             if (field.getMineCount() == 0) {
                 walkNeighbours(field, this::revealField);
             }
-            if (field.isMine()) {
+            if (field.isRevealedMine()) {
                 handleMine();
             }
         }
@@ -156,5 +159,44 @@ public class GamePanel extends GridPane {
         }
     }
 
+    public void broadcastGameboard() throws IOException {
+        FieldStatus[][] fieldBoard = new FieldStatus[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                fieldBoard[x][y] = field[x][y].getStatus();
 
+            }
+        }
+        NewBoardEvent newBoardEvent = new NewBoardEvent();
+        newBoardEvent.setBoardField(fieldBoard);
+        MulticastSender.getInstance().send(newBoardEvent);
+    }
+
+    public void setNewBoard(FieldStatus[][] newBoard) {
+        this.width = newBoard[0].length;
+        this.height = newBoard.length;
+        this.numberOfMines = 0;
+        drawField();
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                field[x][y] = new GameField(x,y);
+
+                switch(newBoard[x][y]) {
+                    case HIDDEN_MINE:
+                        field[x][y].isHiddenMine();
+                        //fallthrough
+                    case REVEALED_MINE:
+                        numberOfMines++;
+                        incrementMineCount(x,y);
+                        //fallthrough
+                    case HINT:
+                        field[x][y].uncover();
+                        break;
+                }
+            }
+        }
+
+
+    }
 }
