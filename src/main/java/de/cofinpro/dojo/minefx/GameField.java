@@ -44,26 +44,23 @@ public class GameField extends ToggleButton {
 
     public void uncover() {
         this.setSelected(true);
-        this.setDisable(true);
         if (mine) {
             this.status = FieldStatus.MINE;
-            this.setStyle("-fx-base: red;");
         } else {
             this.status = FieldStatus.HINT;
-            this.setStyle("-fx-base: lightgreen;");
         }
+        this.setStyle(status.getStyle());
         this.updateText();
         this.setDisabled(true);
     }
 
     public void mark() {
         if (isMarked()) {
-            this.setStyle("-fx-base: lightgray;");
             this.status = FieldStatus.COVERED;
         } else {
-            this.setStyle("-fx-base: lightblue;");
             this.status = FieldStatus.MARKED;
         }
+        this.setStyle(status.getStyle());
         this.updateText();
         this.toggleEnabled();
     }
