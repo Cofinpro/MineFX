@@ -28,7 +28,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         GridPane statusBar = createStatusBar();
-        gamePanel = new GamePanel(40, 40, 400, timerTimeline, primaryStage);
+        gamePanel = new GamePanel(10, 10, 15, timerTimeline, primaryStage);
 
         VBox root = new VBox();
         root.getChildren().add(createMenu());
