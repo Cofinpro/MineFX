@@ -10,11 +10,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setTitle("Minesweeper");
-        final Scene scene = new Scene(new GamePanel(10,10, 10), bounds.getWidth(), bounds.getHeight());
+        final Scene scene = new Scene(new GamePanel(10,10, 10));
 
         primaryStage.setScene(scene);
+        primaryStage.sizeToScene();
+        primaryStage.setResizable(false);
 
         primaryStage.show();
     }
