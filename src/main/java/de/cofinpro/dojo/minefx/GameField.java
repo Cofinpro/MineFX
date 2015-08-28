@@ -1,8 +1,10 @@
 package de.cofinpro.dojo.minefx;
 
+import de.cofinpro.dojo.minefx.multiplayer.MultiplayerClickHandler;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 
 /**
@@ -19,12 +21,14 @@ public class GameField extends ToggleButton {
     private int yCoordinate;
 
     private static final MineClickHandler clickHandler = new MineClickHandler();
+    private static final MultiplayerClickHandler multiplayerHandler = new MultiplayerClickHandler();
 
     public GameField(int x, int y) {
         super(" ");
         this.xCoordinate = x;
         this.yCoordinate = y;
         this.setOnMouseClicked(clickHandler);
+        this.addEventHandler(MouseEvent.MOUSE_CLICKED, multiplayerHandler);
         this.setMinSize(32, 32);
         this.setMaxSize(32, 32);
     }

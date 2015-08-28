@@ -4,8 +4,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -17,10 +15,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.text.DecimalFormat;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 
 public class Main extends Application {
 
@@ -71,13 +65,10 @@ public class Main extends Application {
         GridPane pane = new GridPane();
         pane.add(time, 0, 0);
 
-        timerTimeline = new Timeline(new KeyFrame(Duration.seconds(0.5), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Duration duration = new Duration(System.currentTimeMillis() - startMillis);
-                String text = DF.format(duration.toHours()) + ":" + DF.format(duration.toMinutes()) + ":" + DF.format(duration.toSeconds());
-                time.setText(text);
-            }
+        timerTimeline = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> {
+            Duration duration = new Duration(System.currentTimeMillis() - startMillis);
+            String text = DF.format(duration.toHours()) + ":" + DF.format(duration.toMinutes()) + ":" + DF.format(duration.toSeconds());
+            time.setText(text);
         }));
 
         timerTimeline.setCycleCount(Animation.INDEFINITE);
@@ -90,5 +81,9 @@ public class Main extends Application {
         startMillis = System.currentTimeMillis();
         timerTimeline.play();
         this.gamePanel.start();
+    }
+
+    public static void main(String[] args) {
+        Main.launch(args);
     }
 }
