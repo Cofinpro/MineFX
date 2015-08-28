@@ -182,7 +182,9 @@ public class GamePanel extends GridPane {
                 switch(newBoard[x][y]) {
                     case HIDDEN_MINE:
                         field[x][y].setHiddenMine();
-                        //fallthrough
+                        numberOfMines++;
+                        incrementMineCount(x,y);
+                        break;
                     case REVEALED_MINE:
                         numberOfMines++;
                         incrementMineCount(x,y);
