@@ -30,7 +30,11 @@ public class GameField extends ToggleButton {
                     if (mine) {
                         new Alert(Alert.AlertType.ERROR, "BANG!").show();
                     } else {
-                        this.uncover();
+                        if (covered) {
+                            this.uncover();
+                        } else {
+                            new Alert(Alert.AlertType.WARNING, "Oops.").show();
+                        }
                     }
 
             }
@@ -59,11 +63,17 @@ public class GameField extends ToggleButton {
             this.status = FieldStatus.HINT;
         }
         this.updateText();
+        this.setDisabled(true);
     }
 
     public void mark() {
-        this.status = FieldStatus.MARKED;
+        this.marked = !this.marked;
         this.updateText();
+        this.toggleEnabled();
+    }
+
+    private void toggleEnabled() {
+        this.setDisabled(! this.isDisabled());
     }
 
     private void updateText() {
