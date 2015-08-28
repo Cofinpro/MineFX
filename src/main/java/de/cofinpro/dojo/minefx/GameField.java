@@ -84,7 +84,9 @@ public class GameField extends ToggleButton {
         if (status != FieldStatus.HINT) {
             if (status.getImageUrl() == null) {
                 this.setText(status.getSymbol());
+                this.setGraphic(null);
             } else {
+                this.setText(null);
                 this.setGraphic(new ImageView(new Image(ClassLoader.getSystemResourceAsStream(status.getImageUrl()))));
             }
         } else {
