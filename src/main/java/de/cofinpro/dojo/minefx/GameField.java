@@ -2,7 +2,6 @@ package de.cofinpro.dojo.minefx;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.input.MouseButton;
 
 
 /**
@@ -10,11 +9,11 @@ import javafx.scene.input.MouseButton;
  */
 public class GameField extends ToggleButton {
 
-    private boolean mine = false;
-    private boolean marked = false;
-    private boolean covered = true;
+    private FieldStatus status = FieldStatus.COVERED;
 
-    private int mineCount = 0;
+    private int mineCountHint = 0;
+
+    private boolean mine = false;
     private int xCoordinate;
     private int yCoordinate;
 
@@ -23,16 +22,17 @@ public class GameField extends ToggleButton {
         this.xCoordinate = x;
         this.yCoordinate = y;
         this.setOnMouseClicked(event -> {
-            if (MouseButton.PRIMARY == event.getButton()) {
-                if (marked) {
-                    new Alert(Alert.AlertType.WARNING, "Oops.").show();
-                } else {
+            switch (event.getButton()) {
+                case SECONDARY:
+                    mark();
+                    break;
+                case PRIMARY:
                     if (mine) {
                         new Alert(Alert.AlertType.ERROR, "BANG!").show();
                     } else {
                         this.uncover();
                     }
-                }
+
             }
         });
     }
@@ -47,37 +47,35 @@ public class GameField extends ToggleButton {
     }
 
     public void incrementMineCount() {
-        mineCount++;
+        mineCountHint++;
     }
 
     public void uncover() {
-        this.covered = false;
+        this.setSelected(true);
+        this.setDisable(true);
+        if (mine) {
+            this.status = FieldStatus.MINE;
+        } else {
+            this.status = FieldStatus.HINT;
+        }
         this.updateText();
     }
 
     public void mark() {
-        this.marked = !this.marked;
+        this.status = FieldStatus.MARKED;
         this.updateText();
     }
 
     private void updateText() {
-        if (marked) {
-            this.setText("X");
+        if (status != FieldStatus.HINT) {
+            this.setText(status.getSymbol());
         } else {
-            if (covered) {
-                this.setText(" ");
-            } else {
-                if (mine) {
-                    this.setText("●");
-                } else {
-                    this.setText(mineCount == 0 ? " " : String.valueOf(mineCount));
-                }
-            }
+            this.setText(mineCountHint == 0 ? null : String.valueOf(mineCountHint));
         }
     }
 
     public int getMineCount() {
-        return mineCount;
+        return mineCountHint;
     }
 
     public int getxCoordinate() {
@@ -86,5 +84,9 @@ public class GameField extends ToggleButton {
 
     public int getyCoordinate() {
         return yCoordinate;
+    }
+
+    public boolean isUncovered() {
+        return status != FieldStatus.COVERED;
     }
 }

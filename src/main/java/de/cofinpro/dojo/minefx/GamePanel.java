@@ -2,13 +2,10 @@ package de.cofinpro.dojo.minefx;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.layout.GridPane;
 
-import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Random;
-import java.util.function.Function;
 
 /**
  * @author Gregor Tudan, Cofinpro AG
@@ -73,12 +70,17 @@ public class GamePanel extends GridPane {
 
     private EventHandler<ActionEvent> revealEmptyFields = event -> {
         GameField gameField = (GameField) event.getSource();
-
-        if (gameField.getMineCount() == 0) {
-
-        }
+        revealEmptyFields(gameField);
     };
 
+    private void revealEmptyFields(GameField field) {
+        if (!field.isUncovered()) {
+            field.uncover();
+            if (field.getMineCount() == 0) {
+                walkNeighbours(field, this::revealEmptyFields);
+            }
+        }
+    }
 
     private void walkNeighbours(GameField field, java.util.function.Consumer<GameField> op) {
         int x = field.getxCoordinate();
