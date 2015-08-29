@@ -60,6 +60,35 @@ public class Main extends Application {
         borderPane.setRight(createUserScoreTable());
         borderPane.setBottom(createStatusBar());
 
+        TableView<UserScoreEntry> tableView = new TableView();
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        TableColumn<UserScoreEntry, String> gamerNameColumn = new TableColumn<>("Gamer");
+        gamerNameColumn.setCellValueFactory(new PropertyValueFactory<UserScoreEntry, String>("userName"));
+
+        TableColumn<UserScoreEntry, Integer> pointColumn = new TableColumn<>("Points");
+        pointColumn.setCellValueFactory(new PropertyValueFactory<UserScoreEntry, Integer>("points"));
+
+
+        userScoreData.addListener(new ListChangeListener<UserScoreEntry>() {
+            @Override
+            public void onChanged(Change<? extends UserScoreEntry> c) {
+                tableView.getItems().clear();
+                tableView.getItems().addAll(userScoreData);
+            }
+        });
+        tableView.getItems().addAll(userScoreData);
+        tableView.getColumns().addAll(gamerNameColumn, pointColumn);
+
+        storeBoardVBox.getChildren().add(tableView);
+
+        splitPane.getItems().add(storeBoardVBox);
+
+
+        VBox root = new VBox();
+        root.getChildren().add(createMenu());
+        root.getChildren().add(splitPane);
+        root.getChildren().add(statusBar);
+
         primaryStage.setTitle("Shitsweeper");
         final Scene scene = new Scene(borderPane);
 

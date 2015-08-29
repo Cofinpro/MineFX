@@ -21,7 +21,7 @@
             <Label text="Number of Rows:" GridPane.rowIndex="1" />
             <Label text="Number of Poo:" GridPane.rowIndex="2" />
             <ToggleButton fx:id="doBigBadPooTglBtn" mnemonicParsing="false" text="On / Off" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label prefHeight="17.0" prefWidth="170.0" text="Do mega Shit:" GridPane.rowIndex="3" />
+            <Label prefHeight="17.0" prefWidth="170.0" text="Eable Big Bad Pooh:" GridPane.rowIndex="3" />
             <Slider fx:id="columnsSlider" blockIncrement="5.0" majorTickUnit="5.0" max="100.0" min="2.0" minorTickCount="2" prefHeight="33.0" prefWidth="143.0" snapToTicks="true" value="10.0" GridPane.columnIndex="1" />
             <Slider fx:id="rowsSlider" majorTickUnit="5.0" max="50.0" min="2.0" minorTickCount="2" prefHeight="33.0" prefWidth="166.0" snapToTicks="true" value="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Slider fx:id="poosSlider" majorTickUnit="5.0" min="1.0" minorTickCount="2" snapToTicks="true" value="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />

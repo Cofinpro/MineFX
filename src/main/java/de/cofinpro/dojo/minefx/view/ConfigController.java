@@ -89,7 +89,7 @@ public class ConfigController {
 
     private void calculatePoosSliderValue(){
         poosSlider.setMax(100);
-        poosSlider.setValue(100);
+        poosSlider.setValue(configFx.getPoos());
 
     }
 
