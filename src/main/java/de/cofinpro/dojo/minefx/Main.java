@@ -1,5 +1,6 @@
 package de.cofinpro.dojo.minefx;
 
+import de.cofinpro.dojo.minefx.multiplayer.MulticastTransmitter;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -23,6 +24,11 @@ public class Main extends Application {
     private GamePanel gamePanel;
     private long startMillis;
     private Timeline timerTimeline;
+    private MulticastTransmitter transmitter;
+
+    public Main() throws IOException {
+        transmitter = MulticastTransmitter.getInstance();
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -43,6 +49,20 @@ public class Main extends Application {
         primaryStage.setResizable(false);
 
         primaryStage.show();
+
+        initializeMultiplayer(primaryStage);
+    }
+
+    private void initializeMultiplayer(Stage primaryStage) {
+        transmitter.setGamePanel(gamePanel);
+        transmitter.listen();
+        primaryStage.setOnCloseRequest(e -> {
+            try {
+                transmitter.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
     }
 
 

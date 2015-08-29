@@ -1,6 +1,7 @@
 package de.cofinpro.dojo.minefx;
 
 import de.cofinpro.dojo.minefx.multiplayer.MultiplayerClickHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,7 +11,7 @@ import javafx.scene.input.MouseEvent;
 /**
  * @author Gregor Tudan, Cofinpro AG
  */
-public class GameField extends ToggleButton {
+public class GameField extends Button {
 
     private FieldStatus status = FieldStatus.COVERED;
 
@@ -18,6 +19,8 @@ public class GameField extends ToggleButton {
 
     private int xCoordinate;
     private int yCoordinate;
+
+    private boolean editable = true;
 
     private static final MineClickHandler clickHandler = new MineClickHandler();
     private static final MultiplayerClickHandler multiplayerHandler = new MultiplayerClickHandler();
@@ -47,14 +50,16 @@ public class GameField extends ToggleButton {
     }
 
     public void uncover() {
-        if (isHiddenMine()) {
-            this.status = FieldStatus.REVEALED_MINE;
-        } else {
-            this.status = FieldStatus.HINT;
+        if (isEditable()) {
+            if (isHiddenMine()) {
+                this.status = FieldStatus.REVEALED_MINE;
+            } else {
+                this.status = FieldStatus.HINT;
+            }
+            this.setStyle(status.getStyle());
+            this.updateText();
+            this.setEditable(false);
         }
-        this.setStyle(status.getStyle());
-        this.updateText();
-        this.setDisabled(true);
     }
 
     public void mark() {
@@ -65,7 +70,7 @@ public class GameField extends ToggleButton {
         }
         this.setStyle(status.getStyle());
         this.updateText();
-        this.toggleEnabled();
+        this.toggleEditable();
     }
 
     public boolean isMarked() {
@@ -80,12 +85,14 @@ public class GameField extends ToggleButton {
         return (FieldStatus.HINT == this.status);
     }
 
-    private void toggleEnabled() {
-        this.setDisabled(!this.isDisabled());
+    private void toggleEditable() {
+        this.setEditable(!this.isEditable());
     }
 
     private void updateText() {
-        if (status != FieldStatus.HINT) {
+        if (status == FieldStatus.HINT) {
+            this.setText(mineCountHint == 0 ? null : String.valueOf(mineCountHint));
+        } else {
             if (status.getImageUrl() == null) {
                 this.setText(status.getSymbol());
                 this.setGraphic(null);
@@ -93,8 +100,6 @@ public class GameField extends ToggleButton {
                 this.setText(null);
                 this.setGraphic(new ImageView(new Image(ClassLoader.getSystemResourceAsStream(status.getImageUrl()))));
             }
-        } else {
-            this.setText(mineCountHint == 0 ? null : String.valueOf(mineCountHint));
         }
     }
 
@@ -120,5 +125,13 @@ public class GameField extends ToggleButton {
 
     public FieldStatus getStatus() {
         return status;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 }
