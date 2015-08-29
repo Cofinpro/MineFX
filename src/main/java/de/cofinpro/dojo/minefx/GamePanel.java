@@ -46,6 +46,7 @@ public class GamePanel extends GridPane {
         this.height = configFx.getRows();
         this.width = configFx.getColumns();
         this.numberOfMines = configFx.getPoos();
+        this.useBigBadPoo = configFx.getDoBigBadPoo();
         drawField();
         placeMines();
     }
