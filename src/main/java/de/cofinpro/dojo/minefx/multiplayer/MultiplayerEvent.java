@@ -15,7 +15,7 @@ public abstract class MultiplayerEvent implements Serializable {
 
     public abstract void executeMove(GamePanel panel);
 
-    private static final String userId = System.getProperty("user.name",  Integer.toString(new Random().nextInt()));
+    private static final String userId = UserIdProvider.getInstance().getUserId();
     protected final String sourceClientId = userId;
     private String gameId;
 

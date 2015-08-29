@@ -69,14 +69,6 @@ public class GameField extends Button {
         updateText();
     }
 
-    public void uncover() {
-        uncover(System.getProperty("user.name"));
-    }
-
-    public void uncoverWithoutUser() {
-        uncover(null);
-    }
-
     public void uncover(String actor) {
         if (isEditable()) {
             if (actor != null) {
@@ -94,10 +86,6 @@ public class GameField extends Button {
             this.updateText();
             this.setEditable(false);
         }
-    }
-
-    public void mark() {
-        mark(System.getProperty("user.name"));
     }
 
     public void mark(String actor) {

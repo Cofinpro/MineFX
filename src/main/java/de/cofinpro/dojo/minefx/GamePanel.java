@@ -3,6 +3,7 @@ package de.cofinpro.dojo.minefx;
 import de.cofinpro.dojo.minefx.model.ConfigFx;
 import de.cofinpro.dojo.minefx.multiplayer.MulticastTransmitter;
 import de.cofinpro.dojo.minefx.multiplayer.NewBoardEvent;
+import de.cofinpro.dojo.minefx.multiplayer.UserIdProvider;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -32,6 +33,7 @@ public class GamePanel extends GridPane {
     private Stage primaryStage;
     private ConfigFx configFx;
     private FieldColorTable colorTable = new FieldColorTable();
+    private String localUserId = UserIdProvider.getInstance().getUserId();
 
     public GamePanel(ConfigFx configFx, Timeline timerTimeline, Stage primaryStage) throws IOException {
         this.configFx = configFx;
@@ -57,7 +59,7 @@ public class GamePanel extends GridPane {
     }
 
     private void placeMines() {
-        this.numberOfMines = Math.min(numberOfMines, width*height -1);
+        this.numberOfMines = Math.min(numberOfMines, width * height - 1);
         Random random = new Random();
         int minesPlaced = 0;
         while (minesPlaced < numberOfMines) {
@@ -117,13 +119,12 @@ public class GamePanel extends GridPane {
 
     public void revealField(String actor, int x, int y) {
         GameField gameField = field[x][y];
-        revealField(gameField);
-        gameField.getModification().setModifiedBy(actor);
+        revealField(gameField, actor);
         handleWinning();
     }
 
     public void handleMine() {
-        Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncoverWithoutUser));
+        Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(g -> {g.uncover(localUserId);}));
         timerTimeline.pause();
 
         new ShitHitsTheFanAnimation(primaryStage).run();
@@ -132,8 +133,9 @@ public class GamePanel extends GridPane {
         mediaPlayer.play();
     }
 
+
     public void handleBigBadPoo() {
-        Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncoverWithoutUser));
+        Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(g -> g.uncover(localUserId)));
         timerTimeline.pause();
 
         new ShitHitsTheFanAnimation(primaryStage).run();
@@ -144,28 +146,31 @@ public class GamePanel extends GridPane {
 
     private EventHandler<ActionEvent> revealEmptyFields = event -> {
         GameField gameField = (GameField) event.getSource();
-        revealField(gameField);
+        revealField(gameField, localUserId);
         calculateScoreBoard();
     };
 
-    private void revealField(GameField field) {
+    private void revealField(GameField field , String actor) {
         if (field.isNotYetRevealed()) {
-            field.uncover();
+            field.uncover(actor);
             if (field.getMineCount() == 0) {
-                walkNeighbours(field, this::revealField);
+                walkNeighbours(field, gameField -> revealField(gameField, actor));
             }
-            if (field.isRevealedMine()) {
-                handleMine();
-            }
-            if (field.isRevealdBigBadPoo()) {
-                handleBigBadPoo();
+
+            // only handle mines if the local user is the cause of the uncovering
+            if (localUserId.equals(actor)) {
+                if (field.isRevealedMine()) {
+                    handleMine();
+                }
+                if (field.isRevealdBigBadPoo()) {
+                    handleBigBadPoo();
+                }
             }
         }
     }
 
     private EventHandler<ActionEvent> checkWinCondition = event -> {
             handleWinning();
-
     };
 
     private void handleWinning() {
@@ -173,7 +178,7 @@ public class GamePanel extends GridPane {
             timerTimeline.pause();
             MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getWinSound());
             mediaPlayer.play();
-        };
+        }
     }
 
     private boolean isWinConditionFulfilled() {
@@ -253,7 +258,7 @@ public class GamePanel extends GridPane {
                         incrementMineCount(x,y);
                         //fallthrough
                     case HINT:
-                        field[x][y].uncover();
+                        field[x][y].uncover(modificationField[x][y].getModifiedBy());
                         break;
                     case COVERED:
                     default: //do nothing
