@@ -17,4 +17,14 @@ public class MarkEvent extends ClickEvent {
         }
         gamePanel.getGameField(getX(),getY()).mark(sourceClientId);
     }
+
+    @Override
+    public String toString() {
+        return "MarkEvent{" +
+                "gameId=" + getGameId() +
+                ", sourceClientId=" + sourceClientId +
+                ", x=" + getX() +
+                ", y=" + getY() +
+                "} ";
+    }
 }
