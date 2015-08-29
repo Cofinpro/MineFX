@@ -28,6 +28,7 @@ public class GamePanel extends GridPane {
     private Timeline timerTimeline;
     private Stage primaryStage;
     private ConfigFx configFx;
+    private FieldColorTable colorTable = new FieldColorTable();
 
     public GamePanel(ConfigFx configFx, Timeline timerTimeline, Stage primaryStage) throws IOException {
         this.configFx = configFx;
@@ -78,7 +79,7 @@ public class GamePanel extends GridPane {
         field = new GameField[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                final GameField gameField = new GameField(i, j);
+                final GameField gameField = new GameField(i, j, colorTable);
                 gameField.setStyle("-fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
                 gameField.addEventHandler(ActionEvent.ACTION, revealEmptyFields);
                 gameField.addEventHandler(ActionEvent.ACTION, checkWinCondition);
