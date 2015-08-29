@@ -189,6 +189,11 @@ public class GamePanel extends GridPane {
                     case HINT:
                         field[x][y].uncover();
                         break;
+                    case MARKED:
+                        field[x][y].mark();
+                        break;
+                    case COVERED:
+                    default: //do nothing
                 }
             }
         }

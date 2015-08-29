@@ -46,6 +46,7 @@ public class GameField extends Button {
 
     public void incrementMineCount() {
         mineCountHint++;
+        updateText();
     }
 
     public void uncover() {
