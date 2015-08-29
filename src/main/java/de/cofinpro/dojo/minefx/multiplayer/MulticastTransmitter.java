@@ -7,6 +7,8 @@ import java.io.*;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,6 +30,8 @@ public class MulticastTransmitter implements Runnable {
 
     private final Logger log = Logger.getLogger(getClass().getName());
     private Thread transmitterThread;
+
+    private ExecutorService service = Executors.newSingleThreadExecutor();
 
 
     private MulticastTransmitter() throws IOException {
@@ -60,6 +64,24 @@ public class MulticastTransmitter implements Runnable {
         socket.send(packet);
     }
 
+    private void parsePacket(DatagramPacket packet) {
+        service.submit(() -> {
+            try {
+                log.info("Received...");
+                ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
+                Object receivedObject = objectInputStream.readObject();
+                if (receivedObject instanceof MultiplayerEvent) {
+                    log.info("Received " + receivedObject.toString());
+                    ((MultiplayerEvent) receivedObject).execute(gamePanel);
+                } else {
+                    throw new IOException("Received packet is not a multiplayer event: " + receivedObject.getClass());
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                log.log(Level.WARNING, "Ignoring bad packet packet", e);
+            }
+        });
+    }
+
     @Override
     public void run() {
         final byte[] receiveBuffer = new byte[bufferLength];
@@ -77,27 +99,12 @@ public class MulticastTransmitter implements Runnable {
 
     }
 
-    private void parsePacket(DatagramPacket packet) {
-        try {
-            log.info("Received...");
-            ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
-            Object receivedObject = objectInputStream.readObject();
-            if (receivedObject instanceof MultiplayerEvent) {
-                log.info("Received " + receivedObject.toString());
-                ((MultiplayerEvent) receivedObject).execute(gamePanel);
-            } else {
-                throw new IOException("Received packet is not a multiplayer event: " + receivedObject.getClass());
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            log.log(Level.WARNING, "Ignoring bad packet packet", e);
-        }
-    }
-
     public void setGamePanel(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }
 
     public void close() throws IOException {
+        service.shutdown();
         transmitterThread.interrupt();
         try {
             socket.leaveGroup(group);

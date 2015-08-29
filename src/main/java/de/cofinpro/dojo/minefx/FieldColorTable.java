@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class FieldColorTable {
 
-    private FieldColor[] colors = new FieldColor [] { FieldColor.LIGHT_BLUE, FieldColor.LIGHT_CORAL, FieldColor.LIGHT_CYAN, FieldColor.LIGHT_GREEN, FieldColor.LIGHT_PINK, FieldColor.LIGHT_SALMON, FieldColor.LIGHT_SKYBLUE, FieldColor.LIGHT_STEELBLUE, FieldColor.LIGHT_YELLOQ };
+    private FieldColor[] colors = new FieldColor [] { FieldColor.LIGHT_BLUE, FieldColor.LIGHT_CORAL, FieldColor.LIGHT_GREEN, FieldColor.LIGHT_PINK, FieldColor.LIGHT_SALMON, FieldColor.LIGHT_SKYBLUE, FieldColor.LIGHT_STEELBLUE, FieldColor.LIGHT_YELLOQ, FieldColor.LIGHT_CYAN };
     private Map<String, FieldColor> mapping = new HashMap<>();
     private int colorsOccupied = 0;
 
