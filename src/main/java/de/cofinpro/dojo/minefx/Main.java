@@ -40,7 +40,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        configFx = new ConfigFx(10, 10, 5, true);
+        configFx = new ConfigFx(10, 10, 5, false);
         createPlayground();
     }
 

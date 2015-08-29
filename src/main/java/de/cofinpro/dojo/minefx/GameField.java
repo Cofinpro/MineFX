@@ -22,6 +22,8 @@ public class GameField extends Button {
 
     private boolean editable = true;
 
+    private FieldColorTable colorTable;
+
     public GameFieldModification getModification() {
         return modification;
     }
@@ -31,7 +33,7 @@ public class GameField extends Button {
     private static final MineClickHandler clickHandler = new MineClickHandler();
     private static final MultiplayerClickHandler multiplayerHandler = new MultiplayerClickHandler();
 
-    public GameField(int x, int y) {
+    public GameField(int x, int y, FieldColorTable colorTable) {
         super(" ");
         this.xCoordinate = x;
         this.yCoordinate = y;
@@ -39,6 +41,7 @@ public class GameField extends Button {
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, multiplayerHandler);
         this.setMinSize(32, 32);
         this.setMaxSize(32, 32);
+        this.colorTable = colorTable;
     }
 
     public void setHiddenMine() {
@@ -103,10 +106,11 @@ public class GameField extends Button {
         }
         if (isMarked()) {
             this.status = FieldStatus.COVERED;
+            this.setStyle(status.getStyle());
         } else {
             this.status = FieldStatus.MARKED;
+            this.setStyle(colorTable.getColor(actor));
         }
-        this.setStyle(status.getStyle());
         this.updateText();
         this.toggleEditable();
     }

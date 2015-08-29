@@ -6,7 +6,7 @@ package de.cofinpro.dojo.minefx;
 public enum FieldStatus {
     COVERED(null, "", "-fx-base: lightgray; -fx-focus-color: transparent;"),
     HIDDEN_MINE(null, "", "-fx-base: lightgray; -fx-focus-color: transparent;"),
-    HINT(null, "", "-fx-base: lightgreen; -fx-focus-color: transparent;"),
+    HINT(null, "", "-fx-base: white; -fx-focus-color: transparent;"),
     REVEALED_MINE("poo.png", "*", "-fx-base: red; -fx-focus-color: transparent;"),
     MARKED("skull.png", "X", "-fx-base: lightblue; -fx-focus-color: transparent;"),
     REVEALED_BIG_BAD_POO("BigBadPoo.png", "!", "-fx-base: red; -fx-focus-color: transparent;"),
