@@ -227,7 +227,7 @@ public class GamePanel extends GridPane {
                         field[x][y].setHiddenBigBadPoo();
                         numberOfMines++;
                         useBigBadPoo = true;
-                        incrementMineCount(x,y);
+                        incrementForBigBadPoo(x,y);
                         break;
                     case HIDDEN_MINE:
                         field[x][y].setHiddenMine();
