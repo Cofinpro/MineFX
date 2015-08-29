@@ -43,6 +43,7 @@ public class GameField extends ToggleButton {
 
     public void incrementMineCount() {
         mineCountHint++;
+        updateText();
     }
 
     public void uncover() {
