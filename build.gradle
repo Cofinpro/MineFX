@@ -1,5 +1,7 @@
-apply plugin: 'java'
+apply plugin: 'application'
 
+mainClassName = "de.cofinpro.dojo.minefx.Main"
+applicationDefaultJvmArgs = ["-Djava.net.preferIPv4Stack=true"]
 repositories {
     jcenter()
 }
