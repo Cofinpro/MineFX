@@ -2,7 +2,9 @@ package de.cofinpro.dojo.minefx.view;
 
 import de.cofinpro.dojo.minefx.model.ConfigFx;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.control.ToggleButton;
 import javafx.stage.Stage;
 
 /**
@@ -48,8 +50,6 @@ public class ConfigController {
 
     /**
      * Sets the stage of this dialog.
-     *
-     * @param configDialogStage
      */
     public void setConfigDialogStage(Stage configDialogStage) {
         this.configDialogStage = configDialogStage;
@@ -57,8 +57,6 @@ public class ConfigController {
 
     /**
      * Sets the configFx to be edited in the dialog.
-     *
-     * @param configFx
      */
     public void setConfigFx(ConfigFx configFx) {
         this.configFx = configFx;
@@ -90,32 +88,13 @@ public class ConfigController {
     }
 
     private void calculatePoosSliderValue(){
-        Double rowValue = rowsSlider.getValue();
-        System.out.println("New rowValue: " + rowValue);
-        Double columnValue = columnsSlider.getValue();
-        System.out.println("New columnValue: " + columnValue );
-        Double newPoosMax = rowValue * columnValue;
-
-        Double currentPoosValue = poosSlider.getValue();
-        Double currentPoosMax = poosSlider.getMax();
-
-
-
-        Double changeMultiplicator =  currentPoosValue / currentPoosMax;
-        Double newPoosValue = newPoosMax *  changeMultiplicator;
-        int newPoosValueAsInt =  newPoosValue.intValue();
-        int newPoosMaxAsInt = newPoosMax.intValue();
-        System.out.println("New poos max: " + newPoosMaxAsInt);
-        System.out.println("New poos value:" + newPoosValueAsInt);
-        poosSlider.setMax(newPoosMaxAsInt);
-        poosSlider.setValue(newPoosValue);
+        poosSlider.setMax(100);
+        poosSlider.setValue(100);
 
     }
 
     /**
      * Returns true if the user clicked OK, false otherwise.
-     *
-     * @return
      */
     public boolean isOkClicked() {
         return okClicked;

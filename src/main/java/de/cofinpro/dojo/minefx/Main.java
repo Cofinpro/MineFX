@@ -9,14 +9,12 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -54,15 +52,21 @@ public class Main extends Application {
 
         VBox root = new VBox();
         root.getChildren().add(createMenu());
-        root.getChildren().add(gamePanel);
+        root.getChildren().add(new ScrollPane(gamePanel));
         root.getChildren().add(statusBar);
 
         primaryStage.setTitle("Shitsweeper");
         final Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);
+
         primaryStage.sizeToScene();
+
+        primaryStage.setMaxWidth(Screen.getPrimary().getBounds().getWidth());
+        primaryStage.setMaxHeight(Screen.getPrimary().getBounds().getHeight());
+
         primaryStage.setResizable(false);
+
 
         primaryStage.show();
 
