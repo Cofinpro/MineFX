@@ -82,7 +82,7 @@ public class GameField extends Button {
             } else {
                 this.status = FieldStatus.HINT;
             }
-            this.setStyle(status.getStyle());
+            this.setStyle(colorTable.getColor(actor));
             this.updateText();
             this.setEditable(false);
         }
