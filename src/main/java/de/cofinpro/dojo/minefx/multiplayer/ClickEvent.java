@@ -33,6 +33,6 @@ public class ClickEvent extends MultiplayerEvent {
 
     @Override
     public void executeMove(GamePanel gamePanel) {
-        gamePanel.revealField(x,y);
+        gamePanel.revealField(sourceClientId, x,y);
     }
 }

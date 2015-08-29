@@ -14,12 +14,13 @@ public abstract class MultiplayerEvent implements Serializable {
 
     public abstract void executeMove(GamePanel panel);
 
-    private static final int clientId = new Random().nextInt();
+    private static final String userId = System.getProperty("user.name");
+    private static final String clientId = userId == null ? Integer.toString(new Random().nextInt()) : userId;
 
-    protected final int sourceClientId = clientId;
+    protected final String sourceClientId = clientId;
 
     public void execute(GamePanel panel) {
-        if (clientId == sourceClientId) {
+        if (clientId.equals(sourceClientId)) {
             // do not execute your own events
             return;
         }

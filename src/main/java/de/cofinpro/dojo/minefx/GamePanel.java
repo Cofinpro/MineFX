@@ -80,9 +80,10 @@ public class GamePanel extends GridPane {
         }
     }
 
-    public void revealField(int x, int y) {
+    public void revealField(String actor, int x, int y) {
         GameField gameField = field[x][y];
         revealField(gameField);
+        gameField.getModification().setModifiedBy(actor);
         handleWinning();
     }
 
