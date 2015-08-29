@@ -1,7 +1,6 @@
 package de.cofinpro.dojo.minefx;
 
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 
 /**
