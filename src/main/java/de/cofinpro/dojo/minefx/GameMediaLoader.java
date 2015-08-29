@@ -9,11 +9,12 @@ import javafx.scene.media.Media;
 public class GameMediaLoader {
 
     private static final String WIN_SOUND_FILENAME = "Bathroom_toilet_flushing.mp3";
-    private static final String WIN_BIG_POO_SOUND_FILENAME = "oh_yes.mp3";
+    private static final String LOOSE_BIG_POO_SOUND_FILENAME = "oh_yes.mp3";
     private static final String LOOSE_SOUND_FILENAME = "Poop.mp3";
 
     private Media winSound;
     private Media looseSound;
+    private Media looseBigBadPoo;
 
     public GameMediaLoader(){
         loadMediaInitalAsync();
@@ -27,6 +28,7 @@ public class GameMediaLoader {
         Runnable task = () -> {
             getLooseSound();
             getWinSound();
+            getLooseBigPooSound();
         };
 
         task.run();
@@ -48,11 +50,11 @@ public class GameMediaLoader {
         return winSound;
     }
 
-    public Media getWinBigPooSound() {
-        if (winSound == null){
-            winSound = getMediaForFilename(WIN_BIG_POO_SOUND_FILENAME);
+    public Media getLooseBigPooSound() {
+        if (looseBigBadPoo == null){
+            looseBigBadPoo = getMediaForFilename(LOOSE_BIG_POO_SOUND_FILENAME);
         }
-        return winSound;
+        return looseBigBadPoo;
     }
 
     public Media getLooseSound() {
@@ -62,6 +64,4 @@ public class GameMediaLoader {
 
         return looseSound;
     }
-
-
 }
