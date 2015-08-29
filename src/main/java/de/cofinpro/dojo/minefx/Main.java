@@ -49,7 +49,7 @@ public class Main extends Application {
         createPlayground();
     }
 
-    public void createPlayground() throws  Exception{
+    public void createPlayground() throws Exception {
         parentWindow = primaryStage;
 
         gamePanel = new GamePanel(configFx, timerTimeline, primaryStage, userScoreData);
@@ -113,21 +113,15 @@ public class Main extends Application {
         menu1.setText("Types of Shit");
         MenuItem showShitConditionsMenuItem = new MenuItem("Shit conditions");
 
-        showShitConditionsMenuItem.setOnAction(typesOfShitActionEvent -> {
-            this.showConfigEditDialog(configFx);
-        });
+        showShitConditionsMenuItem.setOnAction(typesOfShitActionEvent -> this.showConfigEditDialog(configFx));
         menu1.getItems().add(showShitConditionsMenuItem);
-        
+
         MenuItem menuItem = new MenuItem("Shit again");
-        menuItem.setOnAction(event -> {
-            this.restart();
-        });
+        menuItem.setOnAction(event -> this.restart());
         menu.getItems().add(menuItem);
 
         menuItem = new MenuItem("Transfer shit");
-        menuItem.setOnAction(event -> {
-            broadcastGameboard();
-        });
+        menuItem.setOnAction(event -> broadcastGameboard());
         menu.getItems().add(menuItem);
 
         MenuBar bar = new MenuBar();
