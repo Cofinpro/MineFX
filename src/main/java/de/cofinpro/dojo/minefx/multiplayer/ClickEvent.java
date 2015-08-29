@@ -35,6 +35,9 @@ public class ClickEvent extends MultiplayerEvent {
 
     @Override
     public void executeMove(GamePanel gamePanel) {
+        if (!getGameId().equals(gamePanel.getGameId())) {
+            return;
+        }
         gamePanel.revealField(sourceClientId, x,y);
         gamePanel.calculateScoreBoard();
     }

@@ -216,7 +216,8 @@ public class GamePanel extends GridPane {
         MulticastTransmitter.getInstance().send(new NewBoardEvent(gameId, fieldBoard));
     }
 
-    public void setNewBoard(FieldStatus[][] newBoard) {
+    public void setNewBoard(String gameId, FieldStatus[][] newBoard) {
+        this.gameId = gameId;
         this.width = newBoard[0].length;
         this.height = newBoard.length;
         this.numberOfMines = 0;
@@ -289,5 +290,9 @@ public class GamePanel extends GridPane {
         for (UserScoreEntry userScoreEntry : userScoreEntryMap.values()) {
             System.out.println(userScoreEntry.toString());
         }
+    }
+
+    public String getGameId() {
+        return gameId;
     }
 }

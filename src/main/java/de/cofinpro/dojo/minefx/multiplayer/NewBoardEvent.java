@@ -21,7 +21,7 @@ public class NewBoardEvent extends MultiplayerEvent {
 
     @Override
     public void executeMove(GamePanel panel) {
-        panel.setNewBoard(boardField);
+        panel.setNewBoard(getGameId(), boardField);
     }
 
     @Override
