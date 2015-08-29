@@ -124,18 +124,13 @@ public class GameField extends Button {
     private void updateText() {
         if (status == FieldStatus.HINT) {
             this.setText(mineCountHint == 0 ? null : String.valueOf(mineCountHint));
+        } else if (status.getImageUrl() != null) {
+            this.setGraphic(new ImageView(new Image(ClassLoader.getSystemResourceAsStream(status.getImageUrl()))));
         } else {
-            if (status.getImageUrl() == null) {
-                this.setText(status.getSymbol());
-                this.setGraphic(null);
-            } else {
-                this.setText(null);
-                this.setGraphic(new ImageView(new Image(ClassLoader.getSystemResourceAsStream(status.getImageUrl()))));
-            }
+            this.setGraphic(null);
         }
 
         if (modification.isMarked()) {
-            this.setText(null);
             this.setGraphic(new ImageView(new Image(ClassLoader.getSystemResourceAsStream(FieldStatus.MARKED.getImageUrl()))));
         }
     }
