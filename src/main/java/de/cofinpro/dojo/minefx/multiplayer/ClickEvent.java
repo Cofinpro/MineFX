@@ -25,9 +25,10 @@ public class ClickEvent extends MultiplayerEvent {
     @Override
     public String toString() {
         return "ClickEvent{" +
-                "x=" + x +
+                "sourceClientId=" + sourceClientId +
+                ", x=" + x +
                 ", y=" + y +
-                '}';
+                "} ";
     }
 
     @Override

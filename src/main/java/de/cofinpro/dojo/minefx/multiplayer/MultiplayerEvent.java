@@ -16,11 +16,13 @@ public abstract class MultiplayerEvent implements Serializable {
 
     private static final int clientId = new Random().nextInt();
 
-    public static int getClientId() {
-        return clientId;
-    }
+    protected final int sourceClientId = clientId;
 
     public void execute(GamePanel panel) {
+        if (clientId == sourceClientId) {
+            // do not execute your own events
+            return;
+        }
         Task task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -30,6 +32,4 @@ public abstract class MultiplayerEvent implements Serializable {
         };
         Platform.runLater(task);
     }
-
-
 }
