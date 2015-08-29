@@ -7,9 +7,14 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -32,6 +37,7 @@ public class Main extends Application {
     private ConfigFx configFx;
     private Stage primaryStage;
     private MulticastTransmitter transmitter;
+    private ObservableList<UserScoreEntry> userScoreData = FXCollections.observableArrayList();
 
     public Main() throws IOException {
         transmitter = MulticastTransmitter.getInstance();
@@ -48,11 +54,40 @@ public class Main extends Application {
         parentWindow = primaryStage;
 
         GridPane statusBar = createStatusBar();
-        gamePanel = new GamePanel(configFx, timerTimeline, primaryStage);
+        gamePanel = new GamePanel(configFx, timerTimeline, primaryStage, userScoreData);
+
+        SplitPane splitPane = new SplitPane();
+        splitPane.setOrientation(Orientation.HORIZONTAL);
+        splitPane.getItems().add(new ScrollPane(gamePanel));
+        VBox storeBoardVBox = new VBox();
+
+        TableView<UserScoreEntry> tableView = new TableView();
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        TableColumn<UserScoreEntry, String> gamerNameColumn = new TableColumn<>("Gamer");
+        gamerNameColumn.setCellValueFactory(new PropertyValueFactory<UserScoreEntry, String>("userName"));
+
+        TableColumn<UserScoreEntry, Integer> pointColumn = new TableColumn<>("Points");
+        pointColumn.setCellValueFactory(new PropertyValueFactory<UserScoreEntry, Integer>("points"));
+
+
+        userScoreData.addListener(new ListChangeListener<UserScoreEntry>() {
+            @Override
+            public void onChanged(Change<? extends UserScoreEntry> c) {
+                tableView.getItems().clear();
+                tableView.getItems().addAll(userScoreData);
+            }
+        });
+        tableView.getItems().addAll(userScoreData);
+        tableView.getColumns().addAll(gamerNameColumn, pointColumn);
+
+        storeBoardVBox.getChildren().add(tableView);
+
+        splitPane.getItems().add(storeBoardVBox);
+
 
         VBox root = new VBox();
         root.getChildren().add(createMenu());
-        root.getChildren().add(new ScrollPane(gamePanel));
+        root.getChildren().add(splitPane);
         root.getChildren().add(statusBar);
 
         primaryStage.setTitle("Shitsweeper");
@@ -183,7 +218,11 @@ public class Main extends Application {
             return false;
         }
     }
-    
+
+    public void updateUserScoreBoard(){
+
+    }
+
     public static void main(String[] args) {
         Main.launch(args);
     }

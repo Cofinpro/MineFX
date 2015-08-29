@@ -5,6 +5,7 @@ import de.cofinpro.dojo.minefx.multiplayer.MulticastTransmitter;
 import de.cofinpro.dojo.minefx.multiplayer.NewBoardEvent;
 import de.cofinpro.dojo.minefx.multiplayer.UserIdProvider;
 import javafx.animation.Timeline;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.GridPane;
@@ -34,8 +35,10 @@ public class GamePanel extends GridPane {
     private ConfigFx configFx;
     private FieldColorTable colorTable = new FieldColorTable();
     private String localUserId = UserIdProvider.getInstance().getUserId();
+    private ObservableList<UserScoreEntry> userScoreData;
 
-    public GamePanel(ConfigFx configFx, Timeline timerTimeline, Stage primaryStage) throws IOException {
+
+    public GamePanel(ConfigFx configFx, Timeline timerTimeline, Stage primaryStage, ObservableList<UserScoreEntry> userScoreData) throws IOException {
         this.configFx = configFx;
         this.height = configFx.getRows();
         this.width = configFx.getColumns();
@@ -43,11 +46,13 @@ public class GamePanel extends GridPane {
         this.timerTimeline = timerTimeline;
         this.primaryStage = primaryStage;
         this.useBigBadPoo = configFx.getDoBigBadPoo();
-        gameMediaLoader = new GameMediaLoader();
+        this.gameMediaLoader = new GameMediaLoader();
+        this.userScoreData = userScoreData;
         this.start();
     }
 
     public void start() {
+        this.userScoreData.clear();
         this.gameId = String.valueOf(new Random().nextInt(1000));
         this.getChildren().clear();
         this.height = configFx.getRows();
@@ -240,6 +245,7 @@ public class GamePanel extends GridPane {
         this.numberOfMines = 0;
         this.getChildren().clear();
         drawField();
+        userScoreData.clear();
         primaryStage.sizeToScene();
 
         for (int x = 0; x < width; x++) {
@@ -302,8 +308,10 @@ public class GamePanel extends GridPane {
             }
         }
 
+        userScoreData.clear();
         for (UserScoreEntry userScoreEntry : userScoreEntryMap.values()) {
             System.out.println(userScoreEntry.toString());
+            userScoreData.add(userScoreEntry);
         }
     }
 
