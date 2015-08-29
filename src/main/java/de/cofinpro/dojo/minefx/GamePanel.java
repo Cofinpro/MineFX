@@ -168,6 +168,10 @@ public class GamePanel extends GridPane {
         int totalFields = width * height;
         int totalFieldsToUncover = totalFields - numberOfMines;
 
+        if (useBigBadPoo) {
+            totalFieldsToUncover--;
+        }
+
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 GameField gameField = field[x][y];
