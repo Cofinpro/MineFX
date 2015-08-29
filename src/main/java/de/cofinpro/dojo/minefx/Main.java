@@ -56,9 +56,6 @@ public class Main extends Application {
         GridPane statusBar = createStatusBar();
         gamePanel = new GamePanel(configFx, timerTimeline, primaryStage, userScoreData);
 
-        SplitPane splitPane = new SplitPane();
-        splitPane.setOrientation(Orientation.HORIZONTAL);
-        splitPane.getItems().add(new ScrollPane(gamePanel));
         VBox storeBoardVBox = new VBox();
 
         TableView<UserScoreEntry> tableView = new TableView();
@@ -82,8 +79,11 @@ public class Main extends Application {
 
         storeBoardVBox.getChildren().add(tableView);
 
+        SplitPane splitPane = new SplitPane();
+        splitPane.setOrientation(Orientation.HORIZONTAL);
+        splitPane.getItems().add(new ScrollPane(gamePanel));
         splitPane.getItems().add(storeBoardVBox);
-
+        splitPane.setDividerPositions(0.8,0.2);
 
         VBox root = new VBox();
         root.getChildren().add(createMenu());
