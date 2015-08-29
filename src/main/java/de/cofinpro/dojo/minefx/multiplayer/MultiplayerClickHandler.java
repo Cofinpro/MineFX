@@ -19,7 +19,7 @@ public class MultiplayerClickHandler implements EventHandler<MouseEvent> {
         GameField gameField = (GameField) event.getSource();
         try {
             final ClickEvent clickEvent = new ClickEvent(gameField.getxCoordinate(), gameField.getyCoordinate());
-            MulticastSender.getInstance().send(clickEvent);
+            MulticastTransmitter.getInstance().send(clickEvent);
         } catch (IOException e) {
             e.printStackTrace();
         }

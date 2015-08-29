@@ -1,7 +1,6 @@
 package de.cofinpro.dojo.minefx;
 
-import de.cofinpro.dojo.minefx.multiplayer.MulticastReceiver;
-import de.cofinpro.dojo.minefx.multiplayer.MulticastSender;
+import de.cofinpro.dojo.minefx.multiplayer.MulticastTransmitter;
 import de.cofinpro.dojo.minefx.multiplayer.NewBoardEvent;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -34,8 +33,6 @@ public class GamePanel extends GridPane {
         this.timerTimeline = timerTimeline;
         this.primaryStage = primaryStage;
         gameMediaLoader = new GameMediaLoader();
-        MulticastReceiver multicastReceiver = new MulticastReceiver(this);
-        new Thread(multicastReceiver).start();
         this.start();
     }
 
@@ -167,7 +164,7 @@ public class GamePanel extends GridPane {
         }
         NewBoardEvent newBoardEvent = new NewBoardEvent();
         newBoardEvent.setBoardField(fieldBoard);
-        MulticastSender.getInstance().send(newBoardEvent);
+        MulticastTransmitter.getInstance().send(newBoardEvent);
     }
 
     public void setNewBoard(FieldStatus[][] newBoard) {
