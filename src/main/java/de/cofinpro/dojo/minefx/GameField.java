@@ -104,19 +104,20 @@ public class GameField extends Button {
             this.getModification().setModifiedBy(actor);
             this.setTooltip(new Tooltip("Modified by " + actor));
         }
-        if (isMarked()) {
-            this.status = FieldStatus.COVERED;
-            this.setStyle(status.getStyle());
-        } else {
-            this.status = FieldStatus.MARKED;
+
+        modification.toggleMarked();
+
+        if(modification.isMarked()) {
             this.setStyle(colorTable.getColor(actor));
+        } else {
+            this.setStyle(status.getStyle());
         }
         this.updateText();
         this.toggleEditable();
     }
 
     public boolean isMarked() {
-        return (FieldStatus.MARKED == this.status);
+        return modification.isMarked();
     }
 
     public boolean isNotYetRevealed() {
@@ -142,6 +143,11 @@ public class GameField extends Button {
                 this.setText(null);
                 this.setGraphic(new ImageView(new Image(ClassLoader.getSystemResourceAsStream(status.getImageUrl()))));
             }
+        }
+
+        if (modification.isMarked()) {
+            this.setText(null);
+            this.setGraphic(new ImageView(new Image(ClassLoader.getSystemResourceAsStream(FieldStatus.MARKED.getImageUrl()))));
         }
     }
 

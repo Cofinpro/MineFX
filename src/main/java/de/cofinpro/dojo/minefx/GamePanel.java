@@ -244,7 +244,8 @@ public class GamePanel extends GridPane {
                         field[x][y].uncover();
                         break;
                     case MARKED:
-                        field[x][y].mark();
+                        //fixme marked will be in modification
+                        field[x][y].getModification().mark();
                         break;
                     case COVERED:
                     default: //do nothing
