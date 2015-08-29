@@ -13,13 +13,13 @@ public class ConfigFx {
 
     private final IntegerProperty poos;
 
-    private final BooleanProperty doMegaShit;
+    private final BooleanProperty doBigBadPoo;
 
-    public  ConfigFx(Integer columns, Integer rows, Integer poos, Boolean doMegaShit){
+    public  ConfigFx(Integer columns, Integer rows, Integer poos, Boolean doBigBadPoo){
         this.columns = new SimpleIntegerProperty(columns);
         this.rows = new SimpleIntegerProperty(rows);
         this.poos = new SimpleIntegerProperty(poos);
-        this.doMegaShit = new SimpleBooleanProperty(doMegaShit);
+        this.doBigBadPoo = new SimpleBooleanProperty(doBigBadPoo);
     }
 
     public int getColumns() {
@@ -34,16 +34,16 @@ public class ConfigFx {
         this.columns.set(columns);
     }
 
-    public boolean getDoMegaShit() {
-        return doMegaShit.get();
+    public boolean getDoBigBadPoo() {
+        return doBigBadPoo.get();
     }
 
-    public BooleanProperty doMegaShitProperty() {
-        return doMegaShit;
+    public BooleanProperty doBigBadPooProperty() {
+        return doBigBadPoo;
     }
 
-    public void setDoMegaShit(boolean doMegaShit) {
-        this.doMegaShit.set(doMegaShit);
+    public void setDoBigBadPoo(boolean doBigBadPoo) {
+        this.doBigBadPoo.set(doBigBadPoo);
     }
 
     public int getPoos() {
@@ -69,8 +69,4 @@ public class ConfigFx {
     public void setRows(int rows) {
         this.rows.set(rows);
     }
-
-
-
-
 }

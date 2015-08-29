@@ -23,6 +23,7 @@ public class GamePanel extends GridPane {
     int height;
     int width;
     int numberOfMines;
+    private boolean useBigBadPoo = false;
     private GameMediaLoader gameMediaLoader;
     private Timeline timerTimeline;
     private Stage primaryStage;
@@ -35,6 +36,7 @@ public class GamePanel extends GridPane {
         this.numberOfMines = configFx.getPoos();
         this.timerTimeline = timerTimeline;
         this.primaryStage = primaryStage;
+        this.useBigBadPoo = configFx.getDoBigBadPoo();
         gameMediaLoader = new GameMediaLoader();
         this.start();
     }
@@ -114,7 +116,7 @@ public class GamePanel extends GridPane {
             if (field.getMineCount() == 0) {
                 walkNeighbours(field, this::revealField);
             }
-            if (field.isRevealedMine()) {
+            if (field.isRevealedMine() || field.isRevealdBigBadPoo()) {
                 handleMine();
             }
         }
@@ -178,18 +180,25 @@ public class GamePanel extends GridPane {
         this.width = newBoard[0].length;
         this.height = newBoard.length;
         this.numberOfMines = 0;
+        this.useBigBadPoo = true;
         this.getChildren().clear();
         drawField();
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 switch(newBoard[x][y]) {
+                    case HIDDEN_BIG_BAD_POO:
+                        field[x][y].setHiddenBigBadPoo();
+                        numberOfMines++;
+                        incrementMineCount(x,y);
+                        break;
                     case HIDDEN_MINE:
                         field[x][y].setHiddenMine();
                         numberOfMines++;
                         incrementMineCount(x,y);
                         break;
                     case REVEALED_MINE:
+                    case REVEALED_BIG_BAD_POO:
                         numberOfMines++;
                         incrementMineCount(x,y);
                         //fallthrough

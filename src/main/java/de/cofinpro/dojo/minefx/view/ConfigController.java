@@ -32,7 +32,7 @@ public class ConfigController {
     private Label poosSliderValueLbl;
 
     @FXML
-    private ToggleButton doMegaShitTglBtn;
+    private ToggleButton doBigBadPooTglBtn;
 
     private Stage configDialogStage;
     private ConfigFx configFx;
@@ -86,7 +86,7 @@ public class ConfigController {
             poosSliderValueLbl.setText(intValue.toString());
         });
 
-        doMegaShitTglBtn.setSelected(configFx.getDoMegaShit());
+        doBigBadPooTglBtn.setSelected(configFx.getDoBigBadPoo());
     }
 
     private void calculatePoosSliderValue(){
@@ -130,7 +130,7 @@ public class ConfigController {
             configFx.setColumns(((Double) columnsSlider.getValue()).intValue());
             configFx.setRows(((Double) rowsSlider.getValue()).intValue());
             configFx.setPoos(((Double) poosSlider.getValue()).intValue());
-            configFx.setDoMegaShit(doMegaShitTglBtn.isSelected());
+            configFx.setDoBigBadPoo(doBigBadPooTglBtn.isSelected());
 
 
             okClicked = true;
@@ -145,8 +145,4 @@ public class ConfigController {
     private void handleCancel() {
         configDialogStage.close();
     }
-
-
-
-
 }

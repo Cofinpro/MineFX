@@ -2,7 +2,6 @@ package de.cofinpro.dojo.minefx;
 
 import de.cofinpro.dojo.minefx.multiplayer.MultiplayerClickHandler;
 import javafx.scene.control.Button;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -51,6 +50,15 @@ public class GameField extends Button {
         return this.status == FieldStatus.HIDDEN_MINE;
     }
 
+    public void setHiddenBigBadPoo() {
+        this.status = FieldStatus.HIDDEN_BIG_BAD_POO;
+        this.updateText();
+    }
+
+    public boolean isHiddenBigBadPoo() {
+        return status == FieldStatus.HIDDEN_BIG_BAD_POO;
+    }
+
     public void incrementMineCount() {
         mineCountHint++;
         updateText();
@@ -68,6 +76,8 @@ public class GameField extends Button {
             }
             if (isHiddenMine()) {
                 this.status = FieldStatus.REVEALED_MINE;
+            } else if (isHiddenBigBadPoo()) {
+                this.status = FieldStatus.REVEALED_BIG_BAD_POO;
             } else {
                 this.status = FieldStatus.HINT;
             }
@@ -101,7 +111,7 @@ public class GameField extends Button {
     }
 
     public boolean isNotYetRevealed() {
-        return (FieldStatus.COVERED == this.status) || FieldStatus.HIDDEN_MINE == this.status;
+        return (FieldStatus.COVERED == this.status) || isHiddenMine() || isHiddenBigBadPoo();
     }
 
     public boolean isHint() {
@@ -139,11 +149,15 @@ public class GameField extends Button {
     }
 
     public boolean isRevealed() {
-        return isRevealedMine() || isHint();
+        return isRevealedMine() || isHint() || isRevealdBigBadPoo();
     }
 
     public boolean isRevealedMine() {
         return this.status == FieldStatus.REVEALED_MINE;
+    }
+
+    public boolean isRevealdBigBadPoo() {
+        return this.status == FieldStatus.REVEALED_BIG_BAD_POO;
     }
 
     public FieldStatus getStatus() {
