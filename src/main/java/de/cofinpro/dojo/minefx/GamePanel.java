@@ -1,5 +1,6 @@
 package de.cofinpro.dojo.minefx;
 
+import de.cofinpro.dojo.minefx.model.ConfigFx;
 import de.cofinpro.dojo.minefx.multiplayer.MulticastTransmitter;
 import de.cofinpro.dojo.minefx.multiplayer.NewBoardEvent;
 import javafx.animation.Timeline;
@@ -25,11 +26,13 @@ public class GamePanel extends GridPane {
     private GameMediaLoader gameMediaLoader;
     private Timeline timerTimeline;
     private Stage primaryStage;
+    private ConfigFx configFx;
 
-    public GamePanel(int height, int width, int numberOfMines, Timeline timerTimeline, Stage primaryStage) throws IOException {
-        this.height = height;
-        this.width = width;
-        this.numberOfMines = numberOfMines;
+    public GamePanel(ConfigFx configFx, Timeline timerTimeline, Stage primaryStage) throws IOException {
+        this.configFx = configFx;
+        this.height = configFx.getRows();
+        this.width = configFx.getColumns();
+        this.numberOfMines = configFx.getPoos();
         this.timerTimeline = timerTimeline;
         this.primaryStage = primaryStage;
         gameMediaLoader = new GameMediaLoader();
@@ -38,6 +41,9 @@ public class GamePanel extends GridPane {
 
     public void start() {
         this.getChildren().clear();
+        this.height = configFx.getRows();
+        this.width = configFx.getColumns();
+        this.numberOfMines = configFx.getPoos();
         drawField();
         placeMines();
     }
