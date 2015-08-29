@@ -23,7 +23,7 @@ import java.util.Random;
 public class GamePanel extends GridPane {
 
     private GameField[][] field;
-    private  String gameId;
+    private String gameId;
     int height;
     int width;
     int numberOfMines;
@@ -124,7 +124,7 @@ public class GamePanel extends GridPane {
     }
 
     public void handleMine() {
-        Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(g -> {g.uncover(localUserId);}));
+        uncoverAllFields();
         timerTimeline.pause();
 
         new ShitHitsTheFanAnimation(primaryStage).run();
@@ -135,7 +135,7 @@ public class GamePanel extends GridPane {
 
 
     public void handleBigBadPoo() {
-        Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(g -> g.uncover(localUserId)));
+        uncoverAllFields();
         timerTimeline.pause();
 
         new ShitHitsTheFanAnimation(primaryStage).run();
@@ -144,13 +144,20 @@ public class GamePanel extends GridPane {
         mediaPlayer.play();
     }
 
+    private void uncoverAllFields() {
+        Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(g -> {
+            g.uncover(localUserId);
+            g.setDisable(true);
+        }));
+    }
+
     private EventHandler<ActionEvent> revealEmptyFields = event -> {
         GameField gameField = (GameField) event.getSource();
         revealField(gameField, localUserId);
         calculateScoreBoard();
     };
 
-    private void revealField(GameField field , String actor) {
+    private void revealField(GameField field, String actor) {
         if (field.isNotYetRevealed()) {
             field.uncover(actor);
             if (field.getMineCount() == 0) {
@@ -170,7 +177,7 @@ public class GamePanel extends GridPane {
     }
 
     private EventHandler<ActionEvent> checkWinCondition = event -> {
-            handleWinning();
+        handleWinning();
     };
 
     private void handleWinning() {
@@ -239,7 +246,7 @@ public class GamePanel extends GridPane {
             for (int y = 0; y < height; y++) {
                 field[x][y].setModifiaction(modificationField[x][y]);
 
-                switch(newBoard[x][y]) {
+                switch (newBoard[x][y]) {
                     case HIDDEN_BIG_BAD_POO:
                         field[x][y].setHiddenBigBadPoo();
                         numberOfMines++;
@@ -249,13 +256,13 @@ public class GamePanel extends GridPane {
                     case HIDDEN_MINE:
                         field[x][y].setHiddenMine();
                         numberOfMines++;
-                        incrementMineCount(x,y);
+                        incrementMineCount(x, y);
                         break;
                     case REVEALED_BIG_BAD_POO:
                         useBigBadPoo = true;
                     case REVEALED_MINE:
                         numberOfMines++;
-                        incrementMineCount(x,y);
+                        incrementMineCount(x, y);
                         //fallthrough
                     case HINT:
                         field[x][y].uncover(modificationField[x][y].getModifiedBy());
