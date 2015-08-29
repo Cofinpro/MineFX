@@ -16,12 +16,18 @@ public class MultiplayerClickHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent event) {
-        if (event.getButton() != MouseButton.PRIMARY) {
+        GameField gameField = (GameField) event.getSource();
+
+        final ClickEvent clickEvent;
+        if (event.getButton() == MouseButton.PRIMARY) {
+            clickEvent = new ClickEvent(gameField.getGameId(), gameField.getxCoordinate(), gameField.getyCoordinate());
+        } else if (event.getButton() == MouseButton.SECONDARY) {
+            clickEvent = new MarkEvent(gameField.getGameId(), gameField.getxCoordinate(), gameField.getyCoordinate());
+        } else {
             return;
         }
-        GameField gameField = (GameField) event.getSource();
+
         try {
-            final ClickEvent clickEvent = new ClickEvent(gameField.getGameId(), gameField.getxCoordinate(), gameField.getyCoordinate());
             MulticastTransmitter.getInstance().send(clickEvent);
         } catch (IOException e) {
             e.printStackTrace();

@@ -111,6 +111,10 @@ public class GamePanel extends GridPane {
         }
     }
 
+    public GameField getGameField(int x, int y) {
+        return field[x][y];
+    }
+
     public void revealField(String actor, int x, int y) {
         GameField gameField = field[x][y];
         revealField(gameField);
