@@ -74,6 +74,10 @@ public class GameField extends Button {
     }
 
     public void uncover() {
+        uncover(System.getProperty("user.name"));
+    }
+
+    public void uncoverWithoutUser() {
         uncover(null);
     }
 
@@ -97,7 +101,7 @@ public class GameField extends Button {
     }
 
     public void mark() {
-        mark(null);
+        mark(System.getProperty("user.name"));
     }
 
     public void mark(String actor) {

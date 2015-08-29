@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -117,7 +119,7 @@ public class GamePanel extends GridPane {
     }
 
     public void handleMine() {
-        Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncover));
+        Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncoverWithoutUser));
         timerTimeline.pause();
 
         new ShitHitsTheFanAnimation(primaryStage).run();
@@ -127,7 +129,7 @@ public class GamePanel extends GridPane {
     }
 
     public void handleBigBadPoo() {
-        Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncover));
+        Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncoverWithoutUser));
         timerTimeline.pause();
 
         new ShitHitsTheFanAnimation(primaryStage).run();
@@ -139,6 +141,7 @@ public class GamePanel extends GridPane {
     private EventHandler<ActionEvent> revealEmptyFields = event -> {
         GameField gameField = (GameField) event.getSource();
         revealField(gameField);
+        calculateScoreBoard();
     };
 
     private void revealField(GameField field) {
@@ -158,6 +161,7 @@ public class GamePanel extends GridPane {
 
     private EventHandler<ActionEvent> checkWinCondition = event -> {
             handleWinning();
+
     };
 
     private void handleWinning() {
@@ -165,7 +169,7 @@ public class GamePanel extends GridPane {
             timerTimeline.pause();
             MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getWinSound());
             mediaPlayer.play();
-        }
+        };
     }
 
     private boolean isWinConditionFulfilled() {
@@ -251,6 +255,39 @@ public class GamePanel extends GridPane {
                     default: //do nothing
                 }
             }
+        }
+    }
+
+    public void calculateScoreBoard() {
+        System.out.println("calculate Scoreboard");
+
+        Map<String, UserScoreEntry> userScoreEntryMap = new HashMap<>();
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                GameField gameField = field[x][y];
+
+                GameFieldModification modification = gameField.getModification();
+                String user = modification.getModifiedBy();
+                if (user != null) {
+                    if (!userScoreEntryMap.containsKey(user)) {
+                        UserScoreEntry userScoreEntry = new UserScoreEntry();
+                        userScoreEntry.setColor(colorTable.getColor(user));
+                        userScoreEntry.setUserName(user);
+                        userScoreEntry.setPoints(0);
+                        userScoreEntryMap.put(user, userScoreEntry);
+                    }
+
+                    UserScoreEntry userScoreEntry = userScoreEntryMap.get(user);
+                    if (gameField.isHint() && !gameField.isEditable()) {
+                        userScoreEntry.addPoints(gameField.getMineCount());
+                    }
+                }
+            }
+        }
+
+        for (UserScoreEntry userScoreEntry : userScoreEntryMap.values()) {
+            System.out.println(userScoreEntry.toString());
         }
     }
 }
