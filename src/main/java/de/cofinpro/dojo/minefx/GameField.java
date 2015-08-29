@@ -32,9 +32,10 @@ public class GameField extends Button {
 
     private static final MineClickHandler clickHandler = new MineClickHandler();
     private static final MultiplayerClickHandler multiplayerHandler = new MultiplayerClickHandler();
+    private final String gameId;
 
-    public GameField(int x, int y, FieldColorTable colorTable) {
-        super(" ");
+    public GameField(String gameId, int x, int y, FieldColorTable colorTable) {
+        this.gameId = gameId;
         this.xCoordinate = x;
         this.yCoordinate = y;
         this.setOnMouseClicked(clickHandler);
@@ -185,5 +186,9 @@ public class GameField extends Button {
 
     public void setEditable(boolean editable) {
         this.editable = editable;
+    }
+
+    public String getGameId() {
+        return gameId;
     }
 }

@@ -9,7 +9,8 @@ public class ClickEvent extends MultiplayerEvent {
     private int x;
     private int y;
 
-    public ClickEvent(int x, int y) {
+    public ClickEvent(String gameId, int x, int y) {
+        super(gameId);
         this.x = x;
         this.y = y;
     }
@@ -25,7 +26,8 @@ public class ClickEvent extends MultiplayerEvent {
     @Override
     public String toString() {
         return "ClickEvent{" +
-                "sourceClientId=" + sourceClientId +
+                "gameId=" + getGameId() +
+                ", sourceClientId=" + sourceClientId +
                 ", x=" + x +
                 ", y=" + y +
                 "} ";

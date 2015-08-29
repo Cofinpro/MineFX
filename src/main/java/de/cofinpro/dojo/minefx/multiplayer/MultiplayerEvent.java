@@ -12,15 +12,19 @@ import java.util.Random;
  */
 public abstract class MultiplayerEvent implements Serializable {
 
+
     public abstract void executeMove(GamePanel panel);
 
-    private static final String userId = System.getProperty("user.name");
-    private static final String clientId = userId == null ? Integer.toString(new Random().nextInt()) : userId;
+    private static final String userId = System.getProperty("user.name",  Integer.toString(new Random().nextInt()));
+    protected final String sourceClientId = userId;
+    private String gameId;
 
-    protected final String sourceClientId = clientId;
+    public MultiplayerEvent(String gameId) {
+        this.gameId = gameId;
+    }
 
     public void execute(GamePanel panel) {
-        if (clientId.equals(sourceClientId)) {
+        if (userId.equals(sourceClientId)) {
             // do not execute your own events
             return;
         }
@@ -32,5 +36,9 @@ public abstract class MultiplayerEvent implements Serializable {
             }
         };
         Platform.runLater(task);
+    }
+
+    public String getGameId() {
+        return gameId;
     }
 }

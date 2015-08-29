@@ -20,6 +20,7 @@ import java.util.Random;
 public class GamePanel extends GridPane {
 
     private GameField[][] field;
+    private  String gameId;
     int height;
     int width;
     int numberOfMines;
@@ -43,6 +44,7 @@ public class GamePanel extends GridPane {
     }
 
     public void start() {
+        this.gameId = String.valueOf(new Random().nextInt(1000));
         this.getChildren().clear();
         this.height = configFx.getRows();
         this.width = configFx.getColumns();
@@ -97,7 +99,7 @@ public class GamePanel extends GridPane {
         field = new GameField[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                final GameField gameField = new GameField(i, j, colorTable);
+                final GameField gameField = new GameField(gameId, i, j, colorTable);
                 gameField.setStyle("-fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
                 gameField.addEventHandler(ActionEvent.ACTION, revealEmptyFields);
                 gameField.addEventHandler(ActionEvent.ACTION, checkWinCondition);
@@ -207,9 +209,7 @@ public class GamePanel extends GridPane {
 
             }
         }
-        NewBoardEvent newBoardEvent = new NewBoardEvent();
-        newBoardEvent.setBoardField(fieldBoard);
-        MulticastTransmitter.getInstance().send(newBoardEvent);
+        MulticastTransmitter.getInstance().send(new NewBoardEvent(gameId, fieldBoard));
     }
 
     public void setNewBoard(FieldStatus[][] newBoard) {
@@ -227,7 +227,7 @@ public class GamePanel extends GridPane {
                         field[x][y].setHiddenBigBadPoo();
                         numberOfMines++;
                         useBigBadPoo = true;
-                        incrementForBigBadPoo(x,y);
+                        incrementForBigBadPoo(x, y);
                         break;
                     case HIDDEN_MINE:
                         field[x][y].setHiddenMine();

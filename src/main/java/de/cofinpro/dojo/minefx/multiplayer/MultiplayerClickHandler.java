@@ -11,6 +11,9 @@ import java.io.IOException;
  * @author Gregor Tudan, Cofinpro AG
  */
 public class MultiplayerClickHandler implements EventHandler<MouseEvent> {
+
+
+
     @Override
     public void handle(MouseEvent event) {
         if (event.getButton() != MouseButton.PRIMARY) {
@@ -18,7 +21,7 @@ public class MultiplayerClickHandler implements EventHandler<MouseEvent> {
         }
         GameField gameField = (GameField) event.getSource();
         try {
-            final ClickEvent clickEvent = new ClickEvent(gameField.getxCoordinate(), gameField.getyCoordinate());
+            final ClickEvent clickEvent = new ClickEvent(gameField.getGameId(), gameField.getxCoordinate(), gameField.getyCoordinate());
             MulticastTransmitter.getInstance().send(clickEvent);
         } catch (IOException e) {
             e.printStackTrace();

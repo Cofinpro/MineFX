@@ -10,16 +10,24 @@ public class NewBoardEvent extends MultiplayerEvent {
 
     private FieldStatus[][] boardField;
 
-    public FieldStatus[][] getBoardField() {
-        return boardField;
+    public NewBoardEvent(String gameId, FieldStatus[][] boardField) {
+        super(gameId);
+        this.boardField = boardField;
     }
 
-    public void setBoardField(FieldStatus[][] boardField) {
-        this.boardField = boardField;
+    public FieldStatus[][] getBoardField() {
+        return boardField;
     }
 
     @Override
     public void executeMove(GamePanel panel) {
         panel.setNewBoard(boardField);
+    }
+
+    @Override
+    public String toString() {
+        return "NewBoardEvent{" +
+                "gameId=" + getGameId() +
+                '}';
     }
 }
