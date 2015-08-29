@@ -151,7 +151,8 @@ public class GamePanel extends GridPane {
 
     private void uncoverAllFields() {
         Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(g -> {
-            g.uncover(localUserId);
+            // uncovering all fields due to a loss attributes no user
+            g.uncover(null);
             g.setDisable(true);
         }));
     }
