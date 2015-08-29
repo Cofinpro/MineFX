@@ -67,6 +67,11 @@ public class GameField extends Button {
         updateText();
     }
 
+    public void incrementForBigBadPoo() {
+        mineCountHint += 2;
+        updateText();
+    }
+
     public void uncover() {
         uncover(null);
     }

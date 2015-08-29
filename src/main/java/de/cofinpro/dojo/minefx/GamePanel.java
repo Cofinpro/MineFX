@@ -47,32 +47,50 @@ public class GamePanel extends GridPane {
         this.height = configFx.getRows();
         this.width = configFx.getColumns();
         this.numberOfMines = configFx.getPoos();
+        this.useBigBadPoo = configFx.getDoBigBadPoo();
         drawField();
         placeMines();
     }
 
     private void placeMines() {
-        this.numberOfMines = Math.min(numberOfMines, width*height);
+        this.numberOfMines = Math.min(numberOfMines, width*height -1);
         Random random = new Random();
         int minesPlaced = 0;
         while (minesPlaced < numberOfMines) {
+            final GameField gameField = getRandomNonMineField(random);
+            gameField.setHiddenMine();
+            incrementMineCount(gameField.getxCoordinate(), gameField.getyCoordinate());
+            minesPlaced++;
+        }
+
+        if (useBigBadPoo) {
+            final GameField gameField = getRandomNonMineField(random);
+            gameField.setHiddenBigBadPoo();
+            incrementForBigBadPoo(gameField.getxCoordinate(), gameField.getyCoordinate());
+        }
+    }
+
+    private GameField getRandomNonMineField(Random random) {
+        while (true) {
             final int x = random.nextInt(width);
             final int y = random.nextInt(height);
 
             final GameField gameField = field[x][y];
 
-            if (gameField.isHiddenMine()) {
+            if (gameField.isHiddenMine() || gameField.isHiddenBigBadPoo()) {
                 // skip and try another field
                 continue;
             }
-            gameField.setHiddenMine();
-            incrementMineCount(x, y);
-            minesPlaced++;
+            return gameField;
         }
     }
 
     private void incrementMineCount(int x, int y) {
         walkNeighbours(this.field[x][y], GameField::incrementMineCount);
+    }
+
+    private void incrementForBigBadPoo(int x, int y) {
+        walkNeighbours(this.field[x][y], GameField::incrementForBigBadPoo);
     }
 
     private void drawField() {
@@ -97,13 +115,23 @@ public class GamePanel extends GridPane {
     }
 
     public void handleMine() {
-            Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncover));
-            timerTimeline.pause();
+        Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncover));
+        timerTimeline.pause();
 
-            new ShitHitsTheFanAnimation(primaryStage).run();
+        new ShitHitsTheFanAnimation(primaryStage).run();
 
-            MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getLooseSound());
-            mediaPlayer.play();
+        MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getLooseSound());
+        mediaPlayer.play();
+    }
+
+    public void handleBigBadPoo() {
+        Arrays.stream(field).forEach(row -> Arrays.stream(row).forEach(GameField::uncover));
+        timerTimeline.pause();
+
+        new ShitHitsTheFanAnimation(primaryStage).run();
+
+        MediaPlayer mediaPlayer = new MediaPlayer(gameMediaLoader.getLooseBigPooSound());
+        mediaPlayer.play();
     }
 
     private EventHandler<ActionEvent> revealEmptyFields = event -> {
@@ -117,8 +145,11 @@ public class GamePanel extends GridPane {
             if (field.getMineCount() == 0) {
                 walkNeighbours(field, this::revealField);
             }
-            if (field.isRevealedMine() || field.isRevealdBigBadPoo()) {
+            if (field.isRevealedMine()) {
                 handleMine();
+            }
+            if (field.isRevealdBigBadPoo()) {
+                handleBigBadPoo();
             }
         }
     }
@@ -138,6 +169,10 @@ public class GamePanel extends GridPane {
     private boolean isWinConditionFulfilled() {
         int totalFields = width * height;
         int totalFieldsToUncover = totalFields - numberOfMines;
+
+        if (useBigBadPoo) {
+            totalFieldsToUncover--;
+        }
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -181,9 +216,9 @@ public class GamePanel extends GridPane {
         this.width = newBoard[0].length;
         this.height = newBoard.length;
         this.numberOfMines = 0;
-        this.useBigBadPoo = true;
         this.getChildren().clear();
         drawField();
+        primaryStage.sizeToScene();
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -191,6 +226,7 @@ public class GamePanel extends GridPane {
                     case HIDDEN_BIG_BAD_POO:
                         field[x][y].setHiddenBigBadPoo();
                         numberOfMines++;
+                        useBigBadPoo = true;
                         incrementMineCount(x,y);
                         break;
                     case HIDDEN_MINE:
@@ -198,8 +234,9 @@ public class GamePanel extends GridPane {
                         numberOfMines++;
                         incrementMineCount(x,y);
                         break;
-                    case REVEALED_MINE:
                     case REVEALED_BIG_BAD_POO:
+                        useBigBadPoo = true;
+                    case REVEALED_MINE:
                         numberOfMines++;
                         incrementMineCount(x,y);
                         //fallthrough
