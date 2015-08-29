@@ -11,13 +11,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -53,59 +52,44 @@ public class Main extends Application {
     public void createPlayground() throws  Exception{
         parentWindow = primaryStage;
 
-        GridPane statusBar = createStatusBar();
         gamePanel = new GamePanel(configFx, timerTimeline, primaryStage, userScoreData);
 
-        SplitPane splitPane = new SplitPane();
-        splitPane.setOrientation(Orientation.HORIZONTAL);
-        splitPane.getItems().add(new ScrollPane(gamePanel));
-        VBox storeBoardVBox = new VBox();
-
-        TableView<UserScoreEntry> tableView = new TableView();
-        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        TableColumn<UserScoreEntry, String> gamerNameColumn = new TableColumn<>("Gamer");
-        gamerNameColumn.setCellValueFactory(new PropertyValueFactory<UserScoreEntry, String>("userName"));
-
-        TableColumn<UserScoreEntry, Integer> pointColumn = new TableColumn<>("Points");
-        pointColumn.setCellValueFactory(new PropertyValueFactory<UserScoreEntry, Integer>("points"));
-
-
-        userScoreData.addListener(new ListChangeListener<UserScoreEntry>() {
-            @Override
-            public void onChanged(Change<? extends UserScoreEntry> c) {
-                tableView.getItems().clear();
-                tableView.getItems().addAll(userScoreData);
-            }
-        });
-        tableView.getItems().addAll(userScoreData);
-        tableView.getColumns().addAll(gamerNameColumn, pointColumn);
-
-        storeBoardVBox.getChildren().add(tableView);
-
-        splitPane.getItems().add(storeBoardVBox);
-
-
-        VBox root = new VBox();
-        root.getChildren().add(createMenu());
-        root.getChildren().add(splitPane);
-        root.getChildren().add(statusBar);
+        BorderPane borderPane = new BorderPane();
+        borderPane.setTop(createMenu());
+        borderPane.setCenter(new ScrollPane(gamePanel));
+        borderPane.setRight(createUserScoreTable());
+        borderPane.setBottom(createStatusBar());
 
         primaryStage.setTitle("Shitsweeper");
-        final Scene scene = new Scene(root);
+        final Scene scene = new Scene(borderPane);
 
         primaryStage.setScene(scene);
-
         primaryStage.sizeToScene();
 
         primaryStage.setMaxWidth(Screen.getPrimary().getBounds().getWidth());
         primaryStage.setMaxHeight(Screen.getPrimary().getBounds().getHeight());
 
-        primaryStage.setResizable(false);
-
-
         primaryStage.show();
 
         initializeMultiplayer(primaryStage);
+    }
+
+    private TableView<UserScoreEntry> createUserScoreTable() {
+        TableView<UserScoreEntry> tableView = new TableView<>();
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        TableColumn<UserScoreEntry, String> gamerNameColumn = new TableColumn<>("Gamer");
+        gamerNameColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
+
+        TableColumn<UserScoreEntry, Integer> pointColumn = new TableColumn<>("Points");
+        pointColumn.setCellValueFactory(new PropertyValueFactory<>("points"));
+
+        userScoreData.addListener((ListChangeListener<UserScoreEntry>) c -> {
+            tableView.getItems().clear();
+            tableView.getItems().addAll(userScoreData);
+        });
+        tableView.getItems().addAll(userScoreData);
+        tableView.getColumns().addAll(gamerNameColumn, pointColumn);
+        return tableView;
     }
 
     private void initializeMultiplayer(Stage primaryStage) {
@@ -128,7 +112,6 @@ public class Main extends Application {
         Menu menu1 = new Menu();
         menu1.setText("Types of Shit");
         MenuItem showShitConditionsMenuItem = new MenuItem("Shit conditions");
-
 
         showShitConditionsMenuItem.setOnAction(typesOfShitActionEvent -> {
             this.showConfigEditDialog(configFx);
@@ -161,6 +144,8 @@ public class Main extends Application {
         Label time = new Label();
         GridPane pane = new GridPane();
         pane.add(time, 0, 0);
+        pane.setMaxHeight(20);
+        pane.setPrefHeight(20);
 
         timerTimeline = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> {
             Duration duration = new Duration(System.currentTimeMillis() - startMillis);
@@ -194,7 +179,7 @@ public class Main extends Application {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getClassLoader().getResource("view/ConfigMenu.fxml"));
-            Pane page = (Pane) loader.load();
+            Pane page = loader.load();
 
             // Create the dialog Stage.
             Stage dialogStage = new Stage();
@@ -217,10 +202,6 @@ public class Main extends Application {
             e.printStackTrace();
             return false;
         }
-    }
-
-    public void updateUserScoreBoard(){
-
     }
 
     public static void main(String[] args) {
