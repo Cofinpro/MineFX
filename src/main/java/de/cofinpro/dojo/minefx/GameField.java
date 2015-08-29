@@ -24,10 +24,6 @@ public class GameField extends Button {
 
     private FieldColorTable colorTable;
 
-    public GameFieldModification getModification() {
-        return modification;
-    }
-
     private GameFieldModification modification = new GameFieldModification();
 
     private static final MineClickHandler clickHandler = new MineClickHandler();
@@ -194,5 +190,13 @@ public class GameField extends Button {
 
     public String getGameId() {
         return gameId;
+    }
+
+    public GameFieldModification getModification() {
+        return modification;
+    }
+
+    public void setModifiaction(GameFieldModification gameFieldModifiaction) {
+        this.modification = gameFieldModifiaction;
     }
 }

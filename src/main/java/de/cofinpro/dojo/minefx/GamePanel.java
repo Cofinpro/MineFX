@@ -211,16 +211,17 @@ public class GamePanel extends GridPane {
 
     public void broadcastGameboard() throws IOException {
         FieldStatus[][] fieldBoard = new FieldStatus[width][height];
+        GameFieldModification[][] fieldModifications = new GameFieldModification[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 fieldBoard[x][y] = field[x][y].getStatus();
-
+                fieldModifications[x][y] = field[x][y].getModification();
             }
         }
-        MulticastTransmitter.getInstance().send(new NewBoardEvent(gameId, fieldBoard));
+        MulticastTransmitter.getInstance().send(new NewBoardEvent(gameId, fieldBoard, fieldModifications));
     }
 
-    public void setNewBoard(String gameId, FieldStatus[][] newBoard) {
+    public void setNewBoard(String gameId, FieldStatus[][] newBoard, GameFieldModification[][] modificationField) {
         this.gameId = gameId;
         this.width = newBoard[0].length;
         this.height = newBoard.length;
@@ -231,6 +232,8 @@ public class GamePanel extends GridPane {
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
+                field[x][y].setModifiaction(modificationField[x][y]);
+
                 switch(newBoard[x][y]) {
                     case HIDDEN_BIG_BAD_POO:
                         field[x][y].setHiddenBigBadPoo();
@@ -251,10 +254,6 @@ public class GamePanel extends GridPane {
                         //fallthrough
                     case HINT:
                         field[x][y].uncover();
-                        break;
-                    case MARKED:
-                        //fixme marked will be in modification
-                        field[x][y].getModification().mark();
                         break;
                     case COVERED:
                     default: //do nothing

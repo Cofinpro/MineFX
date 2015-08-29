@@ -1,6 +1,7 @@
 package de.cofinpro.dojo.minefx.multiplayer;
 
 import de.cofinpro.dojo.minefx.FieldStatus;
+import de.cofinpro.dojo.minefx.GameFieldModification;
 import de.cofinpro.dojo.minefx.GamePanel;
 
 /**
@@ -10,18 +11,17 @@ public class NewBoardEvent extends MultiplayerEvent {
 
     private FieldStatus[][] boardField;
 
-    public NewBoardEvent(String gameId, FieldStatus[][] boardField) {
+    private GameFieldModification[][] modificationField;
+
+    public NewBoardEvent(String gameId, FieldStatus[][] boardField, GameFieldModification[][] modificationField) {
         super(gameId);
         this.boardField = boardField;
-    }
-
-    public FieldStatus[][] getBoardField() {
-        return boardField;
+        this.modificationField = modificationField;
     }
 
     @Override
     public void executeMove(GamePanel panel) {
-        panel.setNewBoard(getGameId(), boardField);
+        panel.setNewBoard(getGameId(), boardField, modificationField);
     }
 
     @Override
