@@ -17,14 +17,14 @@ public class MineClickHandler implements EventHandler<MouseEvent> {
                     // bereits aufgedeckte Felder werden nicht markiert
                     return;
                 }
-                gameField.mark();
+                gameField.mark(System.getProperty("user.name"));
                 break;
             case PRIMARY:
                 if (gameField.isMarked() || gameField.isHiddenMine()) {
                     return;
                 }
                 if (gameField.isNotYetRevealed()) {
-                    gameField.uncover();
+                    gameField.uncover(System.getProperty("user.name"));
                 }
         }
     }

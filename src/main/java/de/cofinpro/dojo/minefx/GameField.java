@@ -3,6 +3,7 @@ package de.cofinpro.dojo.minefx;
 import de.cofinpro.dojo.minefx.multiplayer.MultiplayerClickHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -21,6 +22,12 @@ public class GameField extends Button {
     private int yCoordinate;
 
     private boolean editable = true;
+
+    public GameFieldModification getModification() {
+        return modification;
+    }
+
+    private GameFieldModification modification = new GameFieldModification();
 
     private static final MineClickHandler clickHandler = new MineClickHandler();
     private static final MultiplayerClickHandler multiplayerHandler = new MultiplayerClickHandler();
@@ -50,7 +57,15 @@ public class GameField extends Button {
     }
 
     public void uncover() {
+        uncover(null);
+    }
+
+    public void uncover(String actor) {
         if (isEditable()) {
+            if (actor != null) {
+                this.getModification().setModifiedBy(actor);
+                this.setTooltip(new Tooltip("Modified by " + actor));
+            }
             if (isHiddenMine()) {
                 this.status = FieldStatus.REVEALED_MINE;
             } else {
@@ -63,6 +78,14 @@ public class GameField extends Button {
     }
 
     public void mark() {
+        mark(null);
+    }
+
+    public void mark(String actor) {
+        if (actor != null) {
+            this.getModification().setModifiedBy(actor);
+            this.setTooltip(new Tooltip("Modified by " + actor));
+        }
         if (isMarked()) {
             this.status = FieldStatus.COVERED;
         } else {
