@@ -52,13 +52,14 @@ public class Main extends Application {
     public void createPlayground() throws Exception {
         parentWindow = primaryStage;
 
-        gamePanel = new GamePanel(configFx, timerTimeline, primaryStage, userScoreData);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(createMenu());
+        borderPane.setBottom(createStatusBar());
+
+        gamePanel = new GamePanel(configFx, timerTimeline, primaryStage, userScoreData);
         borderPane.setCenter(new ScrollPane(gamePanel));
         borderPane.setRight(createUserScoreTable());
-        borderPane.setBottom(createStatusBar());
 
         primaryStage.setTitle("Shitsweeper");
         final Scene scene = new Scene(borderPane);
